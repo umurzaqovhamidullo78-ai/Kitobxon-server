@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kitobxon</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,sans-serif;
+    background:#f4f8f5;
+    color:#17351f;
+    padding-bottom:80px;
+}
+
+header{
+    background:#168a45;
+    color:white;
+    padding:18px 16px;
+    position:sticky;
+    top:0;
+    z-index:10;
+}
+
+.header{
+    max-width:1100px;
+    margin:auto;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.logo{
+    font-size:25px;
+    font-weight:bold;
+}
+
+.logo small{
+    display:block;
+    font-size:13px;
+    font-weight:normal;
+    margin-top:4px;
+}
+
+.container{
+    max-width:1100px;
+    margin:auto;
+    padding:18px;
+}
+
+.page{
+    display:none;
+}
+
+.page.active{
+    display:block;
+}
+
+.search-box{
+    background:white;
+    padding:13px 16px;
+    border-radius:16px;
+    margin:16px 0;
+    display:flex;
+    gap:10px;
+    box-shadow:0 3px 12px #0001;
+}
+
+.search-box input{
+    width:100%;
+    border:0;
+    outline:0;
+    font-size:16px;
+}
+
+.hero{
+    background:linear-gradient(135deg,#168a45,#38ad68);
+    color:white;
+    border-radius:22px;
+    padding:25px;
+    margin-top:18px;
+}
+
+.hero h1{
+    font-size:25px;
+    margin-bottom:10px;
+}
+
+.hero p{
+    line-height:1.5;
+}
+
+.title{
+    font-size:21px;
+    margin:23px 0 13px;
+}
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+    gap:15px;
+}
+
+.card{
+    background:white;
+    border-radius:18px;
+    padding:15px;
+    box-shadow:0 3px 12px #0001;
+}
+
+.cover{
+    height:190px;
+    background:#e2f1e7;
+    border-radius:13px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:55px;
+}
+
+.card h3{
+    margin:10px 0 6px;
+}
+
+.card p{
+    color:#66736a;
+    font-size:14px;
+    line-height:1.5;
+}
+
+button{
+    border:0;
+    border-radius:12px;
+    padding:11px 15px;
+    background:#168a45;
+    color:white;
+    cursor:pointer;
+    margin-top:10px;
+}
+
+button.secondary{
+    background:#e6f4ea;
+    color:#168a45;
+}
+
+.library{
+    display:flex;
+    gap:15px;
+    align-items:flex-start;
+}
+
+.library-icon{
+    font-size:45px;
+}
+
+.info{
+    margin:8px 0;
+    color:#58665d;
+}
+
+.profile{
+    background:white;
+    border-radius:20px;
+    padding:22px;
+    box-shadow:0 3px 12px #0001;
+}
+
+.avatar{
+    width:75px;
+    height:75px;
+    border-radius:50%;
+    background:#e0f1e6;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:38px;
+    margin-bottom:12px;
+}
+
+.menu-item{
+    background:#f8faf8;
+    padding:16px;
+    border-radius:14px;
+    margin-top:10px;
+}
+
+.news{
+    background:white;
+    padding:18px;
+    border-radius:18px;
+    box-shadow:0 3px 12px #0001;
+    margin-bottom:14px;
+}
+
+.contact{
+    background:white;
+    padding:20px;
+    border-radius:18px;
+    box-shadow:0 3px 12px #0001;
+}
+
+.empty{
+    text-align:center;
+    padding:35px;
+    color:#718078;
+}
+
+nav{
+    position:fixed;
+    bottom:0;
+    left:0;
+    right:0;
+    background:white;
+    border-top:1px solid #ddd;
+    display:flex;
+    justify-content:space-around;
+    z-index:20;
+    padding:7px 2px;
+}
+
+nav button{
+    background:transparent;
+    color:#59665d;
+    margin:0;
+    padding:6px 4px;
+    font-size:11px;
+}
+
+nav button.active{
+    color:#168a45;
+    font-weight:bold;
+}
+
+.nav-icon{
+    display:block;
+    font-size:20px;
+    margin-bottom:3px;
+}
+
+@media(min-width:700px){
+    body{
+        padding-bottom:20px;
+    }
+
+    nav{
+        position:static;
+        max-width:1100px;
+        margin:20px auto;
+        border:0;
+        border-radius:15px;
+        box-shadow:0 3px 12px #0001;
+    }
+
+    nav button{
+        font-size:14px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="header">
+        <div class="logo">
+            📚 KITOBXON
+            <small>Yagona kutubxona tizimi</small>
+        </div>
+        <div>🔔</div>
+    </div>
+</header>
+
+<main class="container">
+
+<!-- BOSH SAHIFA -->
+<section id="home" class="page active">
+
+    <div class="hero">
+        <h1>Kitobxon ilovasiga xush kelibsiz!</h1>
+        <p>
+            Kitoblarni qidiring, kutubxonalar haqida ma'lumot oling
+            va kerakli kitobni bron qiling.
+        </p>
+    </div>
+
+    <div class="search-box">
+        🔎
+        <input
+            id="homeSearch"
+            type="text"
+            placeholder="Kitob yoki muallifni qidiring..."
+            oninput="quickSearch(this.value)"
+        >
+    </div>
+
+    <h2 class="title">📚 Yangi kitoblar</h2>
+
+    <div class="cards">
+
+        <div class="card">
+            <div class="cover">📖</div>
+            <h3>O'tkan kunlar</h3>
+            <p>Abdulla Qodiriy</p>
+            <button onclick="bookDetails('O‘tkan kunlar','Abdulla Qodiriy')">
+                Batafsil
+            </button>
+        </div>
+
+        <div class="card">
+            <div class="cover">📕</div>
+            <h3>Mehrobdan chayon</h3>
+            <p>Abdulla Qodiriy</p>
+            <button onclick="bookDetails('Mehrobdan chayon','Abdulla Qodiriy')">
+                Batafsil
+            </button>
+        </div>
+
+        <div class="card">
+            <div class="cover">📗</div>
+            <h3>Ikki eshik orasi</h3>
+            <p>O‘tkir Hoshimov</p>
+            <button onclick="bookDetails('Ikki eshik orasi','O‘tkir Hoshimov')">
+                Batafsil
+            </button>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- KITOBLAR -->
+<section id="books" class="page">
+
+    <h2 class="title">📚 Kitoblar</h2>
+
+    <div class="cards">
+
+        <div class="card">
+            <div class="cover">📖</div>
+            <h3>O'tkan kunlar</h3>
+            <p>Muallif: Abdulla Qodiriy</p>
+            <p>Janr: Roman</p>
+            <button onclick="bookDetails('O‘tkan kunlar','Abdulla Qodiriy')">
+                Batafsil
+            </button>
+        </div>
+
+        <div class="card">
+            <div class="cover">📕</div>
+            <h3>Mehrobdan chayon</h3>
+            <p>Muallif: Abdulla Qodiriy</p>
+            <p>Janr: Roman</p>
+            <button onclick="bookDetails('Mehrobdan chayon','Abdulla Qodiriy')">
+                Batafsil
+            </button>
+        </div>
+
+        <div class="card">
+            <div class="cover">📗</div>
+            <h3>Ikki eshik orasi</h3>
+            <p>Muallif: O‘tkir Hoshimov</p>
+            <p>Janr: Roman</p>
+            <button onclick="bookDetails('Ikki eshik orasi','O‘tkir Hoshimov')">
+                Batafsil
+            </button>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- QIDIRUV -->
+<section id="search" class="page">
+
+    <h2 class="title">🔎 Qidiruv</h2>
+
+    <div class="search-box">
+        🔎
+        <input
+            id="searchInput"
+            type="text"
+            placeholder="Kitob, muallif yoki janr..."
+            oninput="searchBooks(this.value)"
+        >
+    </div>
+
+    <div id="searchResults" class="cards">
+        <div class="empty">
+            Qidiruv so'zini kiriting.
+        </div>
+    </div>
+
+</section>
+
+
+<!-- KUTUBXONALAR -->
+<section id="libraries" class="page">
+
+    <h2 class="title">🏛 Kutubxonalar</h2>
+
+    <div class="card library">
+
+        <div class="library-icon">🏛️</div>
+
+        <div>
+
+            <h3>
+                Namangan tumani
+                Axborot-kutubxona markazi
+            </h3>
+
+            <p class="info">
+                📍 Namangan viloyati, Namangan tumani, Toshbuloq
+            </p>
+
+            <p class="info">
+                🕘 Ish vaqti: 09:00–18:00
+            </p>
+
+            <p class="info">
+                📚 Elektron katalog mavjud
+            </p>
+
+            <button onclick="message('Kutubxona katalogi keyingi bosqichda serverdan yuklanadi.')">
+                Katalog
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- PROFIL -->
+<section id="profile" class="page">
+
+    <h2 class="title">👤 Mening kabinetlarim</h2>
+
+    <div class="profile">
+
+        <div class="avatar">👤</div>
+
+        <h2>Kitobxon</h2>
+
+        <p class="info">
+            Foydalanuvchi kabineti
+        </p>
+
+        <div class="menu-item">
+            ❤️ Sevimli kitoblar
+        </div>
+
+        <div class="menu-item">
+            📖 O‘qish tarixi
+        </div>
+
+        <div class="menu-item">
+            📌 Bron qilingan kitoblar
+        </div>
+
+        <div class="menu-item">
+            🔔 Bildirishnomalar
+        </div>
+
+        <div class="menu-item">
+            ⚙️ Sozlamalar
+        </div>
+
+        <button onclick="message('Kirish va ro‘yxatdan o‘tish keyingi bosqichda server bilan ulanadi.')">
+            Kirish / Ro‘yxatdan o‘tish
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- YANGILIKLAR -->
+<section id="news" class="page">
+
+    <h2 class="title">📰 Yangiliklar</h2>
+
+    <div class="news">
+        <h3>📚 Yangi kitoblar</h3>
+        <p class="info">
+            Kutubxona fondi yangi adabiyotlar bilan boyitilmoqda.
+        </p>
+        <button onclick="message('Yangilik tafsilotlari keyingi bosqichda ochiladi.')">
+            Batafsil
+        </button>
+    </div>
+
+    <div class="news">
+        <h3>🎓 Kitobxonlik tadbiri</h3>
+        <p class="info">
+            Kitobxonlar uchun ma'rifiy tadbirlar tashkil etilmoqda.
+        </p>
+        <button onclick="message('Tadbir tafsilotlari keyingi bosqichda ochiladi.')">
+            Batafsil
+        </button>
+    </div>
+
+</section>
+
+
+<!-- ALOQA -->
+<section id="contact" class="page">
+
+    <h2 class="title">📞 Aloqa</h2>
+
+    <div class="contact">
+
+        <h3>
+            Namangan tumani
+            Axborot-kutubxona markazi
+        </h3>
+
+        <p class="info">
+            📍 Toshbuloq, Namangan tumani
+        </p>
+
+        <p class="info">
+            🕘 09:00–18:00
+        </p>
+
+        <p class="info">
+            📞 Telefon raqami keyingi bosqichda qo‘shiladi
+        </p>
+
+        <button onclick="message('Murojaat yuborish funksiyasi keyingi bosqichda qo‘shiladi.')">
+            Murojaat yuborish
+        </button>
+
+    </div>
+
+</section>
+
+</main>
+
+
+<!-- PASTKI MENYU -->
+<nav>
+
+    <button id="nav-home"
+            class="active"
+            onclick="showPage('home')">
+        <span class="nav-icon">🏠</span>
+        Bosh sahifa
+    </button>
+
+    <button id="nav-books"
+            onclick="showPage('books')">
+        <span class="nav-icon">📚</span>
+        Kitoblar
+    </button>
+
+    <button id="nav-search"
+            onclick="showPage('search')">
+        <span class="nav-icon">🔎</span>
+        Qidiruv
+    </button>
+
+    <button id="nav-libraries"
+            onclick="showPage('libraries')">
+        <span class="nav-icon">🏛️</span>
+        Kutubxonalar
+    </button>
+
+    <button id="nav-profile"
+            onclick="showPage('profile')">
+        <span class="nav-icon">👤</span>
+        Kabinet
+    </button>
+
+    <button id="nav-news"
+            onclick="showPage('news')">
+        <span class="nav-icon">📰</span>
+        Yangiliklar
+    </button>
+
+    <button id="nav-contact"
+            onclick="showPage('contact')">
+        <span class="nav-icon">📞</span>
+        Aloqa
+    </button>
+
+</nav>
+
+
+<script>
+
+const books = [
+    {
+        title:"O‘tkan kunlar",
+        author:"Abdulla Qodiriy",
+        genre:"Roman"
+    },
+    {
+        title:"Mehrobdan chayon",
+        author:"Abdulla Qodiriy",
+        genre:"Roman"
+    },
+    {
+        title:"Ikki eshik orasi",
+        author:"O‘tkir Hoshimov",
+        genre:"Roman"
+    }
+];
+
+
+function showPage(page){
+
+    document.querySelectorAll(".page")
+        .forEach(function(item){
+            item.classList.remove("active");
+        });
+
+    document.getElementById(page)
+        .classList.add("active");
+
+    document.querySelectorAll("nav button")
+        .forEach(function(item){
+            item.classList.remove("active");
+        });
+
+    const navButton =
+        document.getElementById("nav-" + page);
+
+    if(navButton){
+        navButton.classList.add("active");
+    }
+
+    window.scrollTo(0,0);
+}
+
+
+function bookDetails(title,author){
+
+    alert(
+        "📖 " + title +
+        "\n\n✍️ Muallif: " + author +
+        "\n\n📚 Batafsil ma'lumot, mavjud nusxalar va bron qilish funksiyasi keyingi bosqichda qo‘shiladi."
+    );
+}
+
+
+function message(text){
+    alert(text);
+}
+
+
+function searchBooks(value){
+
+    const results =
+        document.getElementById("searchResults");
+
+    const query =
+        value.trim().toLowerCase();
+
+    if(!query){
+
+        results.innerHTML =
+            '<div class="empty">Qidiruv so‘zini kiriting.</div>';
+
+        return;
+    }
+
+    const found =
+        books.filter(function(book){
+
+            return (
+                book.title.toLowerCase().includes(query) ||
+                book.author.toLowerCase().includes(query) ||
+                book.genre.toLowerCase().includes(query)
+            );
+
+        });
+
+
+    if(found.length === 0){
+
+        results.innerHTML =
+            '<div class="empty">Kitob topilmadi.</div>';
+
+        return;
+    }
+
+
+    results.innerHTML =
+        found.map(function(book){
+
+            return `
+                <div class="card">
+
+                    <div class="cover">📖</div>
+
+                    <h3>${book.title}</h3>
+
+                    <p>Muallif: ${book.author}</p>
+
+                    <p>Janr: ${book.genre}</p>
+
+                    <button
+                        onclick="bookDetails('${book.title}','${book.author}')">
+                        Batafsil
+                    </button>
+
+                </div>
+            `;
+
+        }).join("");
+}
+
+
+function quickSearch(value){
+
+    if(value.trim().length > 0){
+
+        showPage("search");
+
+        document.getElementById("searchInput").value =
+            value;
+
+        searchBooks(value);
+    }
+}
+
+</script>
+
+</body>
+</html>
