@@ -1,3 +1,4 @@
+const path = require("path");
 const express = require("express");
 const cors = require("cors");
 const Database = require("better-sqlite3");
@@ -6,7 +7,8 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: "30mb" }));
+app.use(express.static(__dirname));
 
 const db = new Database("kitobxon.db");
 
@@ -108,12 +110,7 @@ if (libraryCount.count === 0) {
 // ===============================
 
 app.get("/", (req, res) => {
-    res.json({
-        success: true,
-        app: "Kitobxon",
-        message: "Kitobxon server ishlayapti",
-        version: "1.0.0"
-    });
+    res.sendFile(path.join(__dirname, "Kitobxon_app.html"));
 });
 
 // ===============================
@@ -257,7 +254,9 @@ app.post("/api/books", (req, res) => {
         inventory_number,
         copies,
         cover,
-        description
+        description,
+        ebook_file,
+        ebook_type
     } = req.body;
 
     if (!title || !author) {
@@ -283,9 +282,11 @@ app.post("/api/books", (req, res) => {
             copies,
             available,
             cover,
-            description
+            description,
+            ebook_file,
+            ebook_type
         )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `).run(
         title,
         author,
@@ -298,7 +299,9 @@ app.post("/api/books", (req, res) => {
         copyCount,
         copyCount,
         cover || "",
-        description || ""
+        description || "",
+        ebook_file || "",
+        ebook_type || ""
     );
 
     res.json({
@@ -426,73 +429,6 @@ app.post("/api/users", (req, res) => {
 // RESERVATIONS
 // ===============================
 
-app.post("/api/reservations", (req, res) => {
-    const {
-        user_id,
-        book_id
-    } = req.body;
-
-    if (!user_id || !book_id) {
-        return res.status(400).json({
-            success: false,
-            message: "user_id va book_id kerak"
-        });
-    }
-
-    const book = db
-        .prepare("SELECT available FROM books WHERE id = ?")
-        .get(book_id);
-
-    if (!book) {
-        return res.status(404).json({
-            success: false,
-            message: "Kitob topilmadi"
-        });
-    }
-
-    if (book.available <= 0) {
-        return res.status(400).json({
-            success: false,
-            message: "Kitob hozir mavjud emas"
-        });
-    }
-
-    const result = db.prepare(`
-        INSERT INTO reservations
-        (user_id, book_id)
-        VALUES (?, ?)
-    `).run(user_id, book_id);
-
-    res.json({
-        success: true,
-        id: result.lastInsertRowid,
-        message: "Kitob bron qilindi"
-    });
-});
-
-app.get("/api/users/:userId/reservations", (req, res) => {
-    const reservations = db.prepare(`
-        SELECT
-            reservations.*,
-            books.title,
-            books.author,
-            books.cover
-        FROM reservations
-        JOIN books
-            ON reservations.book_id = books.id
-        WHERE reservations.user_id = ?
-        ORDER BY reservations.id DESC
-    `).all(req.params.userId);
-
-    res.json({
-        success: true,
-        data: reservations
-    });
-});
-
-// ===============================
-// FAVORITES
-// ===============================
 
 app.post("/api/favorites", (req, res) => {
     const {
@@ -580,6 +516,36 @@ app.post("/api/news", (req, res) => {
     res.json({
         success: true,
         id: result.lastInsertRowid
+    });
+});
+
+// ===============================
+// PDF FILES
+// ===============================
+
+app.get("/api/books/:id/pdf", (req, res) => {
+    const book = db.prepare(`
+        SELECT id, title
+        FROM books
+        WHERE id = ?
+    `).get(req.params.id);
+
+    if (!book) {
+        return res.status(404).json({
+            success: false,
+            message: "Kitob topilmadi"
+        });
+    }
+
+    const pdfPath = path.join(__dirname, "pdf", `${book.id}.pdf`);
+
+    res.sendFile(pdfPath, (err) => {
+        if (err && !res.headersSent) {
+            res.status(404).json({
+                success: false,
+                message: "Bu kitob uchun PDF fayl mavjud emas"
+            });
+        }
     });
 });
 

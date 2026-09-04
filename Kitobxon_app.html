@@ -3,55 +3,101 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kitobxon</title>
+<title>KITOBXON — Elektron kutubxona</title>
 
 <style>
 *{
     box-sizing:border-box;
     margin:0;
     padding:0;
+    font-family:Arial, sans-serif;
 }
 
 body{
-    font-family:Arial,sans-serif;
-    background:#f4f8f5;
-    color:#17351f;
-    padding-bottom:80px;
+    background:#f4faf6;
+    color:#173b2b;
 }
 
-header{
-    background:#168a45;
+button,input,select,textarea{
+    font:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+.header{
+    background:#087f5b;
     color:white;
-    padding:18px 16px;
+    padding:12px 5%;
+}
+
+.top{
+    max-width:1250px;
+    margin:auto;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+}
+
+.languages button{
+    background:white;
+    color:#087f5b;
+    border:0;
+    padding:6px 10px;
+    border-radius:20px;
+    margin-left:4px;
+    font-size:12px;
+}
+
+.brand{
+    max-width:1250px;
+    margin:18px auto 8px;
+}
+
+.brand h1{
+    font-size:32px;
+}
+
+.brand p{
+    opacity:.9;
+}
+
+.nav{
+    background:white;
+    box-shadow:0 2px 10px #00000012;
     position:sticky;
     top:0;
     z-index:10;
 }
 
-.header{
-    max-width:1100px;
+.nav-inner{
+    max-width:1250px;
     margin:auto;
     display:flex;
-    justify-content:space-between;
-    align-items:center;
+    overflow:auto;
 }
 
-.logo{
-    font-size:25px;
+.nav button{
+    background:none;
+    border:0;
+    padding:17px 16px;
+    color:#315747;
+    white-space:nowrap;
+}
+
+.nav button:hover,
+.nav button.active{
+    color:#087f5b;
     font-weight:bold;
-}
-
-.logo small{
-    display:block;
-    font-size:13px;
-    font-weight:normal;
-    margin-top:4px;
+    border-bottom:3px solid #087f5b;
 }
 
 .container{
-    max-width:1100px;
-    margin:auto;
-    padding:18px;
+    max-width:1250px;
+    margin:25px auto;
+    padding:0 18px;
 }
 
 .page{
@@ -62,203 +108,372 @@ header{
     display:block;
 }
 
-.search-box{
-    background:white;
-    padding:13px 16px;
-    border-radius:16px;
-    margin:16px 0;
-    display:flex;
-    gap:10px;
-    box-shadow:0 3px 12px #0001;
-}
-
-.search-box input{
-    width:100%;
-    border:0;
-    outline:0;
-    font-size:16px;
-}
-
 .hero{
-    background:linear-gradient(135deg,#168a45,#38ad68);
+    background:linear-gradient(135deg,#087f5b,#12a879);
     color:white;
+    padding:35px;
     border-radius:22px;
-    padding:25px;
-    margin-top:18px;
+    margin-bottom:28px;
 }
 
-.hero h1{
-    font-size:25px;
+.hero h2{
+    font-size:30px;
     margin-bottom:10px;
 }
 
-.hero p{
-    line-height:1.5;
+.section-title{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin:25px 0 15px;
 }
 
-.title{
-    font-size:21px;
-    margin:23px 0 13px;
+.book-grid{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:18px;
+}
+
+.book-card{
+    background:white;
+    border-radius:16px;
+    overflow:hidden;
+    box-shadow:0 4px 16px #00000010;
+    transition:.2s;
+}
+
+.book-card:hover{
+    transform:translateY(-3px);
+}
+
+.cover{
+    height:210px;
+    background:linear-gradient(145deg,#b7ead7,#5fcba6);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:15px;
+    text-align:center;
+    color:#075b41;
+    font-weight:bold;
+    font-size:19px;
+}
+
+.book-info{
+    padding:14px;
+}
+
+.book-info h3{
+    font-size:17px;
+    margin-bottom:7px;
+}
+
+.book-info p{
+    color:#66756e;
+    font-size:13px;
+    margin:4px 0;
+}
+
+.btn{
+    border:0;
+    border-radius:10px;
+    padding:10px 13px;
+    margin-top:9px;
+}
+
+.btn-primary{
+    background:#087f5b;
+    color:white;
+}
+
+.btn-light{
+    background:#e5f5ef;
+    color:#087f5b;
+}
+
+.btn-danger{
+    background:#dc3545;
+    color:white;
+}
+
+.btn-full{
+    width:100%;
+}
+
+.search-box{
+    background:white;
+    padding:20px;
+    border-radius:16px;
+    box-shadow:0 3px 12px #0000000d;
+    margin-bottom:20px;
+}
+
+.search-box input,
+.form input,
+.form select,
+.form textarea{
+    width:100%;
+    border:1px solid #d4e4dd;
+    padding:12px;
+    border-radius:10px;
+    outline:none;
+    margin-top:7px;
+}
+
+.search-row{
+    display:grid;
+    grid-template-columns:2fr 1fr auto;
+    gap:10px;
 }
 
 .cards{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
-    gap:15px;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
 }
 
-.card{
+.info-card{
     background:white;
-    border-radius:18px;
-    padding:15px;
-    box-shadow:0 3px 12px #0001;
-}
-
-.cover{
-    height:190px;
-    background:#e2f1e7;
-    border-radius:13px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-size:55px;
-}
-
-.card h3{
-    margin:10px 0 6px;
-}
-
-.card p{
-    color:#66736a;
-    font-size:14px;
-    line-height:1.5;
-}
-
-button{
-    border:0;
-    border-radius:12px;
-    padding:11px 15px;
-    background:#168a45;
-    color:white;
-    cursor:pointer;
-    margin-top:10px;
-}
-
-button.secondary{
-    background:#e6f4ea;
-    color:#168a45;
-}
-
-.library{
-    display:flex;
-    gap:15px;
-    align-items:flex-start;
-}
-
-.library-icon{
-    font-size:45px;
-}
-
-.info{
-    margin:8px 0;
-    color:#58665d;
-}
-
-.profile{
-    background:white;
-    border-radius:20px;
-    padding:22px;
-    box-shadow:0 3px 12px #0001;
-}
-
-.avatar{
-    width:75px;
-    height:75px;
-    border-radius:50%;
-    background:#e0f1e6;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:38px;
-    margin-bottom:12px;
-}
-
-.menu-item{
-    background:#f8faf8;
-    padding:16px;
-    border-radius:14px;
-    margin-top:10px;
-}
-
-.news{
-    background:white;
-    padding:18px;
-    border-radius:18px;
-    box-shadow:0 3px 12px #0001;
-    margin-bottom:14px;
-}
-
-.contact{
-    background:white;
+    border-radius:16px;
     padding:20px;
-    border-radius:18px;
-    box-shadow:0 3px 12px #0001;
+    box-shadow:0 3px 15px #0000000d;
 }
 
-.empty{
-    text-align:center;
-    padding:35px;
-    color:#718078;
+.info-card h3{
+    margin-bottom:8px;
 }
 
-nav{
-    position:fixed;
-    bottom:0;
-    left:0;
-    right:0;
+.form{
     background:white;
-    border-top:1px solid #ddd;
-    display:flex;
-    justify-content:space-around;
-    z-index:20;
-    padding:7px 2px;
+    padding:25px;
+    border-radius:18px;
+    box-shadow:0 3px 15px #0000000d;
 }
 
-nav button{
-    background:transparent;
-    color:#59665d;
-    margin:0;
-    padding:6px 4px;
-    font-size:11px;
+.form-group{
+    margin-bottom:15px;
 }
 
-nav button.active{
-    color:#168a45;
+.form label{
     font-weight:bold;
 }
 
-.nav-icon{
-    display:block;
-    font-size:20px;
-    margin-bottom:3px;
+.profile{
+    display:grid;
+    grid-template-columns:280px 1fr;
+    gap:20px;
 }
 
-@media(min-width:700px){
-    body{
-        padding-bottom:20px;
+.profile-card{
+    background:white;
+    padding:25px;
+    border-radius:18px;
+    text-align:center;
+    box-shadow:0 3px 15px #0000000d;
+}
+
+.avatar{
+    width:90px;
+    height:90px;
+    border-radius:50%;
+    background:#b7ead7;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    margin:0 auto 15px;
+    font-size:40px;
+}
+
+.stat-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+}
+
+.stat{
+    background:white;
+    padding:20px;
+    border-radius:15px;
+    box-shadow:0 3px 15px #0000000d;
+}
+
+.stat strong{
+    display:block;
+    font-size:28px;
+    color:#087f5b;
+}
+
+.reader{
+    background:white;
+    border-radius:18px;
+    padding:30px;
+    box-shadow:0 3px 15px #0000000d;
+    max-width:900px;
+    margin:auto;
+}
+
+.reader-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.reader-text{
+    font-size:18px;
+    line-height:1.9;
+    min-height:420px;
+    padding:25px;
+    background:#fffdf5;
+    border-radius:12px;
+}
+
+.reader-controls{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    margin-top:20px;
+    flex-wrap:wrap;
+}
+
+.notice{
+    padding:13px;
+    border-radius:10px;
+    margin-bottom:15px;
+    background:#e5f5ef;
+    color:#087f5b;
+}
+
+.reservation{
+    background:white;
+    padding:18px;
+    border-radius:15px;
+    margin-bottom:12px;
+    box-shadow:0 3px 12px #0000000d;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+}
+
+.badge{
+    padding:5px 9px;
+    border-radius:15px;
+    background:#e5f5ef;
+    color:#087f5b;
+    font-size:12px;
+}
+
+.footer{
+    margin-top:50px;
+    background:#075b41;
+    color:white;
+    text-align:center;
+    padding:25px;
+}
+
+.mobile-menu{
+    display:none;
+}
+
+@media(max-width:1000px){
+    .book-grid{
+        grid-template-columns:repeat(3,1fr);
+    }
+}
+
+@media(max-width:700px){
+    .top{
+        flex-direction:column;
+        align-items:flex-start;
     }
 
-    nav{
-        position:static;
-        max-width:1100px;
-        margin:20px auto;
+    .brand h1{
+        font-size:25px;
+    }
+
+    .nav-inner{
+        display:none;
+    }
+
+    .mobile-menu{
+        display:flex;
+        justify-content:space-around;
+        background:white;
+        position:fixed;
+        bottom:0;
+        left:0;
+        right:0;
+        z-index:20;
+        box-shadow:0 -3px 15px #00000018;
+    }
+
+    .mobile-menu button{
         border:0;
-        border-radius:15px;
-        box-shadow:0 3px 12px #0001;
+        background:white;
+        padding:10px 6px;
+        font-size:12px;
+        color:#315747;
     }
 
-    nav button{
+    .container{
+        margin-bottom:75px;
+    }
+
+    .book-grid{
+        grid-template-columns:repeat(2,1fr);
+        gap:10px;
+    }
+
+    .cover{
+        height:170px;
+        font-size:15px;
+    }
+
+    .book-info{
+        padding:10px;
+    }
+
+    .book-info h3{
         font-size:14px;
+    }
+
+    .search-row{
+        grid-template-columns:1fr;
+    }
+
+    .cards{
+        grid-template-columns:1fr;
+    }
+
+    .profile{
+        grid-template-columns:1fr;
+    }
+
+    .stat-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .hero{
+        padding:25px;
+    }
+
+    .hero h2{
+        font-size:24px;
+    }
+
+    .reader{
+        padding:15px;
+    }
+
+    .reader-text{
+        font-size:16px;
+        padding:15px;
+    }
+
+    .reservation{
+        flex-direction:column;
+        align-items:flex-start;
     }
 }
 </style>
@@ -266,68 +481,95 @@ nav button.active{
 
 <body>
 
-<header>
-    <div class="header">
-        <div class="logo">
-            📚 KITOBXON
-            <small>Yagona kutubxona tizimi</small>
+<header class="header">
+
+    <div class="top">
+        <div>
+            <strong>Namangan tuman Axborot-kutubxona markazi</strong>
         </div>
-        <div>🔔</div>
+
+        <div class="languages">
+            <button onclick="setLanguage('uz')">O‘zbek</button>
+            <button onclick="setLanguage('ru')">Русский</button>
+            <button onclick="setLanguage('en')">English</button>
+        </div>
     </div>
+
+    <div class="brand">
+        <h1>📚 KITOBXON</h1>
+        <p id="brandSubtitle">Elektron kutubxona tizimi</p>
+    </div>
+
 </header>
+
+<nav class="nav">
+    <div class="nav-inner">
+
+        <button class="active" onclick="showPage('home',this)">🏠 Bosh sahifa</button>
+
+        <button onclick="showPage('books',this)">📚 Kitoblar</button>
+
+        <button onclick="showPage('search',this)">🔎 Qidiruv</button>
+
+        <button onclick="showPage('libraries',this)">🏛️ Kutubxonalar</button>
+
+        <button onclick="showPage('profile',this)">👤 Profilim</button>
+
+        
+
+        <button onclick="showPage('addbook',this)">➕ Kitob qo‘shish</button>
+
+        <button onclick="showPage('reader',this)">📖 Elektron kitob</button>
+
+        <button onclick="showPage('admin',this)">👑 Admin</button>
+
+    </div>
+</nav>
 
 <main class="container">
 
-<!-- BOSH SAHIFA -->
+<!-- HOME -->
+
 <section id="home" class="page active">
 
     <div class="hero">
-        <h1>Kitobxon ilovasiga xush kelibsiz!</h1>
-        <p>
-            Kitoblarni qidiring, kutubxonalar haqida ma'lumot oling
-            va kerakli kitobni bron qiling.
+        <h2 id="heroTitle">Kitob olamiga xush kelibsiz!</h2>
+        <p id="heroText">
+            KITOBXON — zamonaviy elektron kutubxona tizimi.
         </p>
     </div>
 
-    <div class="search-box">
-        🔎
-        <input
-            id="homeSearch"
-            type="text"
-            placeholder="Kitob yoki muallifni qidiring..."
-            oninput="quickSearch(this.value)"
-        >
+    <div class="section-title">
+        <h2>📚 Yangi kitoblar</h2>
     </div>
 
-    <h2 class="title">📚 Yangi kitoblar</h2>
+    <div id="homeBooks" class="book-grid"></div>
+
+    <div class="section-title">
+        <h2>⭐ Mashhur kitoblar</h2>
+    </div>
+
+    <div id="popularBooks" class="book-grid"></div>
+
+    <div class="section-title">
+        <h2>📰 Yangiliklar</h2>
+    </div>
 
     <div class="cards">
 
-        <div class="card">
-            <div class="cover">📖</div>
-            <h3>O'tkan kunlar</h3>
-            <p>Abdulla Qodiriy</p>
-            <button onclick="bookDetails('O‘tkan kunlar','Abdulla Qodiriy')">
-                Batafsil
-            </button>
+        <div class="info-card">
+            <h3>📚 Yangi kitoblar</h3>
+            <p>Kutubxonamiz fondiga yangi adabiyotlar qo‘shildi.</p>
         </div>
 
-        <div class="card">
-            <div class="cover">📕</div>
-            <h3>Mehrobdan chayon</h3>
-            <p>Abdulla Qodiriy</p>
-            <button onclick="bookDetails('Mehrobdan chayon','Abdulla Qodiriy')">
-                Batafsil
-            </button>
+        <div class="info-card">
+            <h3>🎉 Tadbir</h3>
+            <p>Kitobxonlar bilan navbatdagi adabiy uchrashuv.</p>
         </div>
 
-        <div class="card">
-            <div class="cover">📗</div>
-            <h3>Ikki eshik orasi</h3>
-            <p>O‘tkir Hoshimov</p>
-            <button onclick="bookDetails('Ikki eshik orasi','O‘tkir Hoshimov')">
-                Batafsil
-            </button>
+        <div class="info-card">
+            <h3>📢 E’lon</h3>
+            <p>Kutubxona xizmatlaridan foydalaning.</p>
         </div>
 
     </div>
@@ -335,41 +577,84 @@ nav button.active{
 </section>
 
 
-<!-- KITOBLAR -->
+<!-- BOOKS -->
+
 <section id="books" class="page">
 
-    <h2 class="title">📚 Kitoblar</h2>
+    <div class="section-title">
+        <h2>📚 Barcha kitoblar</h2>
+    </div>
+
+    <div id="booksList" class="book-grid"></div>
+
+</section>
+
+
+<!-- SEARCH -->
+
+<section id="search" class="page">
+
+    <div class="section-title">
+        <h2>🔎 Qidiruv</h2>
+    </div>
+
+    <div class="search-box">
+
+        <div class="search-row">
+
+            <input
+                id="searchInput"
+                type="text"
+                placeholder="Kitob nomi yoki muallif..."
+                oninput="searchBooks()"
+            >
+
+            <select id="genreFilter" onchange="searchBooks()">
+                <option value="">Barcha janrlar</option>
+                <option>Roman</option>
+                <option>Qissa</option>
+                <option>Doston</option>
+                <option>Tarix</option>
+            </select>
+
+            <button class="btn btn-primary" onclick="searchBooks()">
+                🔎 Qidirish
+            </button>
+
+        </div>
+
+    </div>
+
+    <div id="searchResults" class="book-grid"></div>
+
+</section>
+
+
+<!-- LIBRARIES -->
+
+<section id="libraries" class="page">
+
+    <div class="section-title">
+        <h2>🏛️ Kutubxonalar</h2>
+    </div>
 
     <div class="cards">
 
-        <div class="card">
-            <div class="cover">📖</div>
-            <h3>O'tkan kunlar</h3>
-            <p>Muallif: Abdulla Qodiriy</p>
-            <p>Janr: Roman</p>
-            <button onclick="bookDetails('O‘tkan kunlar','Abdulla Qodiriy')">
-                Batafsil
-            </button>
+        <div class="info-card">
+            <h3>🇺🇿 O‘zbekiston</h3>
+            <p>Axborot-kutubxona markazlari</p>
         </div>
 
-        <div class="card">
-            <div class="cover">📕</div>
-            <h3>Mehrobdan chayon</h3>
-            <p>Muallif: Abdulla Qodiriy</p>
-            <p>Janr: Roman</p>
-            <button onclick="bookDetails('Mehrobdan chayon','Abdulla Qodiriy')">
-                Batafsil
-            </button>
+        <div class="info-card">
+            <h3>📍 Namangan viloyati</h3>
+            <p>Viloyat kutubxonalari</p>
         </div>
 
-        <div class="card">
-            <div class="cover">📗</div>
-            <h3>Ikki eshik orasi</h3>
-            <p>Muallif: O‘tkir Hoshimov</p>
-            <p>Janr: Roman</p>
-            <button onclick="bookDetails('Ikki eshik orasi','O‘tkir Hoshimov')">
-                Batafsil
-            </button>
+        <div class="info-card">
+            <h3>🏛️ Namangan tumani</h3>
+            <p>Namangan tuman Axborot-kutubxona markazi</p>
+            <p>📞 Telefon: +998 XX XXX XX XX</p>
+            <p>🕘 Ish vaqti: 09:00 — 18:00</p>
         </div>
 
     </div>
@@ -377,106 +662,135 @@ nav button.active{
 </section>
 
 
-<!-- QIDIRUV -->
-<section id="search" class="page">
+<!-- PROFILE -->
 
-    <h2 class="title">🔎 Qidiruv</h2>
-
-    <div class="search-box">
-        🔎
-        <input
-            id="searchInput"
-            type="text"
-            placeholder="Kitob, muallif yoki janr..."
-            oninput="searchBooks(this.value)"
-        >
-    </div>
-
-    <div id="searchResults" class="cards">
-        <div class="empty">
-            Qidiruv so'zini kiriting.
-        </div>
-    </div>
-
-</section>
-
-
-<!-- KUTUBXONALAR -->
-<section id="libraries" class="page">
-
-    <h2 class="title">🏛 Kutubxonalar</h2>
-
-    <div class="card library">
-
-        <div class="library-icon">🏛️</div>
-
-        <div>
-
-            <h3>
-                Namangan tumani
-                Axborot-kutubxona markazi
-            </h3>
-
-            <p class="info">
-                📍 Namangan viloyati, Namangan tumani, Toshbuloq
-            </p>
-
-            <p class="info">
-                🕘 Ish vaqti: 09:00–18:00
-            </p>
-
-            <p class="info">
-                📚 Elektron katalog mavjud
-            </p>
-
-            <button onclick="message('Kutubxona katalogi keyingi bosqichda serverdan yuklanadi.')">
-                Katalog
-            </button>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- PROFIL -->
 <section id="profile" class="page">
-
-    <h2 class="title">👤 Mening kabinetlarim</h2>
 
     <div class="profile">
 
-        <div class="avatar">👤</div>
+        <div class="profile-card">
 
-        <h2>Kitobxon</h2>
+            <div class="avatar">👤</div>
 
-        <p class="info">
-            Foydalanuvchi kabineti
-        </p>
+            <h2>Kitobxon</h2>
 
-        <div class="menu-item">
-            ❤️ Sevimli kitoblar
+            <p>kitobxon@example.com</p>
+
+            <button class="btn btn-primary btn-full">
+                ⚙️ Sozlamalar
+            </button>
+
         </div>
 
-        <div class="menu-item">
-            📖 O‘qish tarixi
+        <div>
+
+            <div class="stat-grid">
+
+                <div class="stat">
+                    <strong id="favCount">0</strong>
+                    ⭐ Sevimlilar
+                </div>
+
+                <div class="stat">
+                    <strong id="reservationCount">0</strong>
+                    📋 Bronlar
+                </div>
+
+                <div class="stat">
+                    <strong id="readCount">0</strong>
+                    📖 O‘qilgan
+                </div>
+
+            </div>
+
+            <br>
+
+            <div class="info-card">
+
+                <h3>👤 Shaxsiy ma’lumotlar</h3>
+
+                <p>Ism: Kitobxon</p>
+                <p>Email: kitobxon@example.com</p>
+                <p>Rol: Kitobxon</p>
+
+            </div>
+
         </div>
 
-        <div class="menu-item">
-            📌 Bron qilingan kitoblar
+    </div>
+
+</section>
+
+
+<!-- RESERVATIONS -->
+
+
+
+
+<!-- ADD BOOK -->
+
+<section id="addbook" class="page">
+
+    <div class="section-title">
+        <h2>➕ Kitob qo‘shish</h2>
+    </div>
+
+    <div class="notice">
+        👨‍💼 Ushbu bo‘lim xodim va administratorlar uchun.
+    </div>
+
+    <div class="form">
+
+        <div class="form-group">
+            <label>Kitob nomi</label>
+            <input id="bookTitle" placeholder="Masalan: Yangi kitob">
         </div>
 
-        <div class="menu-item">
-            🔔 Bildirishnomalar
+        <div class="form-group">
+            <label>Muallif</label>
+            <input id="bookAuthor" placeholder="Muallif">
         </div>
 
-        <div class="menu-item">
-            ⚙️ Sozlamalar
+        <div class="form-group">
+            <label>Janr</label>
+
+            <select id="bookGenre">
+                <option>Roman</option>
+                <option>Qissa</option>
+                <option>Doston</option>
+                <option>Tarix</option>
+            </select>
+
         </div>
 
-        <button onclick="message('Kirish va ro‘yxatdan o‘tish keyingi bosqichda server bilan ulanadi.')">
-            Kirish / Ro‘yxatdan o‘tish
+        <div class="form-group">
+            <label>ISBN</label>
+            <input id="bookISBN" placeholder="ISBN">
+        </div>
+
+        <div class="form-group">
+            <label>Nashr yili</label>
+            <input id="bookYear" type="number" placeholder="2026">
+        </div>
+
+        <div class="form-group">
+            <label>Kitobxonalar soni</label>
+            <input id="bookCopies" type="number" value="1">
+        </div>
+
+        <div class="form-group">
+            <label>📕 Kitob muqovasi</label>
+            <input id="bookCover" type="file" accept="image/*"><br><br><label>📚 Elektron kitob (PDF yoki EPUB)</label><input id="bookFile" type="file" accept=".pdf,.epub,application/pdf,application/epub+zip">
+        </div>
+
+        <div class="form-group">
+            <label>Tavsif</label>
+            <textarea id="bookDescription" rows="5"
+                placeholder="Kitob haqida ma’lumot"></textarea>
+        </div>
+
+        <button class="btn btn-primary" onclick="addBook()">
+            💾 Kitobni saqlash
         </button>
 
     </div>
@@ -484,61 +798,101 @@ nav button.active{
 </section>
 
 
-<!-- YANGILIKLAR -->
-<section id="news" class="page">
+<!-- EBOOK READER -->
 
-    <h2 class="title">📰 Yangiliklar</h2>
+<section id="reader" class="page">
 
-    <div class="news">
-        <h3>📚 Yangi kitoblar</h3>
-        <p class="info">
-            Kutubxona fondi yangi adabiyotlar bilan boyitilmoqda.
-        </p>
-        <button onclick="message('Yangilik tafsilotlari keyingi bosqichda ochiladi.')">
-            Batafsil
-        </button>
-    </div>
+    <div class="reader">
 
-    <div class="news">
-        <h3>🎓 Kitobxonlik tadbiri</h3>
-        <p class="info">
-            Kitobxonlar uchun ma'rifiy tadbirlar tashkil etilmoqda.
-        </p>
-        <button onclick="message('Tadbir tafsilotlari keyingi bosqichda ochiladi.')">
-            Batafsil
-        </button>
+        <div class="reader-top">
+
+            <h2 id="readerTitle">📖 O‘tkan kunlar</h2>
+
+            <span id="pageNumber">1 / 5</span>
+
+        </div>
+
+        <div id="readerText" class="reader-text"></div>
+
+        <div class="reader-controls">
+
+            <button class="btn btn-light" onclick="previousPage()">
+                ◀ Oldingi
+            </button>
+
+            <button class="btn btn-primary" onclick="nextPage()">
+                Keyingi ▶
+            </button>
+
+            <button class="btn btn-light" onclick="changeFont(-1)">
+                Aa−
+            </button>
+
+            <button class="btn btn-light" onclick="changeFont(1)">
+                Aa+
+            </button>
+
+            <button class="btn btn-light" onclick="toggleReaderTheme()">
+                ☾
+            </button>
+
+        </div>
+
     </div>
 
 </section>
 
 
-<!-- ALOQA -->
-<section id="contact" class="page">
+<!-- ADMIN -->
 
-    <h2 class="title">📞 Aloqa</h2>
+<section id="admin" class="page">
 
-    <div class="contact">
+    <div class="section-title">
+        <h2>👑 Administrator paneli</h2>
+    </div>
 
-        <h3>
-            Namangan tumani
-            Axborot-kutubxona markazi
-        </h3>
+    <div class="stat-grid">
 
-        <p class="info">
-            📍 Toshbuloq, Namangan tumani
-        </p>
+        <div class="stat">
+            <strong id="adminBooks">0</strong>
+            📚 Kitoblar
+        </div>
 
-        <p class="info">
-            🕘 09:00–18:00
-        </p>
+        <div class="stat">
+            <strong>1</strong>
+            👨‍💼 Xodimlar
+        </div>
 
-        <p class="info">
-            📞 Telefon raqami keyingi bosqichda qo‘shiladi
-        </p>
+        <div class="stat">
+            <strong>1</strong>
+            👥 Foydalanuvchilar
+        </div>
 
-        <button onclick="message('Murojaat yuborish funksiyasi keyingi bosqichda qo‘shiladi.')">
-            Murojaat yuborish
-        </button>
+    </div>
+
+    <br>
+
+    <div class="cards">
+
+        <div class="info-card">
+            <h3>📚 Kitoblarni boshqarish</h3>
+            <p>Kitob qo‘shish, tahrirlash va o‘chirish.</p>
+        </div>
+
+        <div class="info-card">
+            <h3>👥 Foydalanuvchilar</h3>
+            <p>Kitobxonlar va xodimlarni boshqarish.</p>
+        </div>
+
+        <div class="info-card">
+            <h3>📊 Hisobotlar</h3>
+            <p>Kitoblar va foydalanish statistikasi.</p>
+        </div>
+
+        <div class="info-card">
+            <h3>🔐 Xavfsizlik</h3>
+            <p>Rollar va tizim huquqlarini boshqarish.</p>
+        </div>
 
     </div>
 
@@ -547,193 +901,882 @@ nav button.active{
 </main>
 
 
-<!-- PASTKI MENYU -->
-<nav>
+<footer class="footer">
 
-    <button id="nav-home"
-            class="active"
-            onclick="showPage('home')">
-        <span class="nav-icon">🏠</span>
-        Bosh sahifa
+    <p>📚 KITOBXON</p>
+    <p>Namangan tuman Axborot-kutubxona markazi</p>
+
+</footer>
+
+
+<!-- MOBILE MENU -->
+
+<div class="mobile-menu">
+
+    <button onclick="showPage('home')">
+        🏠<br>Bosh
     </button>
 
-    <button id="nav-books"
-            onclick="showPage('books')">
-        <span class="nav-icon">📚</span>
-        Kitoblar
+    <button onclick="showPage('books')">
+        📚<br>Kitoblar
     </button>
 
-    <button id="nav-search"
-            onclick="showPage('search')">
-        <span class="nav-icon">🔎</span>
-        Qidiruv
+    <button onclick="showPage('search')">
+        🔎<br>Qidiruv
     </button>
 
-    <button id="nav-libraries"
-            onclick="showPage('libraries')">
-        <span class="nav-icon">🏛️</span>
-        Kutubxonalar
+    <button onclick="showPage('profile')">
+        👤<br>Profil
     </button>
 
-    <button id="nav-profile"
-            onclick="showPage('profile')">
-        <span class="nav-icon">👤</span>
-        Kabinet
-    </button>
-
-    <button id="nav-news"
-            onclick="showPage('news')">
-        <span class="nav-icon">📰</span>
-        Yangiliklar
-    </button>
-
-    <button id="nav-contact"
-            onclick="showPage('contact')">
-        <span class="nav-icon">📞</span>
-        Aloqa
-    </button>
-
-</nav>
+</div>
 
 
 <script>
 
-const books = [
+/* =========================
+   KITOBLAR
+========================= */
+
+let books = JSON.parse(localStorage.getItem("kitobxon_books")) || [
+
     {
+        id:1,
         title:"O‘tkan kunlar",
         author:"Abdulla Qodiriy",
-        genre:"Roman"
+        genre:"Roman",
+        year:"1926",
+        isbn:"978-9943",
+        copies:5,
+        available:5
     },
+
     {
+        id:2,
         title:"Mehrobdan chayon",
         author:"Abdulla Qodiriy",
-        genre:"Roman"
+        genre:"Roman",
+        year:"1929",
+        isbn:"978-9944",
+        copies:4,
+        available:4
     },
+
     {
+        id:3,
         title:"Ikki eshik orasi",
         author:"O‘tkir Hoshimov",
-        genre:"Roman"
+        genre:"Roman",
+        year:"1986",
+        isbn:"978-9945",
+        copies:6,
+        available:6
+    },
+
+    {
+        id:4,
+        title:"Dunyoning ishlari",
+        author:"O‘tkir Hoshimov",
+        genre:"Qissa",
+        year:"1982",
+        isbn:"978-9946",
+        copies:3,
+        available:3
+    },
+
+    {
+        id:5,
+        title:"Alpomish",
+        author:"Xalq dostoni",
+        genre:"Doston",
+        year:"2020",
+        isbn:"978-9947",
+        copies:5,
+        available:5
+    },
+
+    {
+        id:6,
+        title:"Boburnoma",
+        author:"Zahiriddin Muhammad Bobur",
+        genre:"Tarix",
+        year:"1525",
+        isbn:"978-9948",
+        copies:2,
+        available:2
     }
+
 ];
 
+let favorites =
+    JSON.parse(localStorage.getItem("kitobxon_favorites")) || [];
 
-function showPage(page){
-
-    document.querySelectorAll(".page")
-        .forEach(function(item){
-            item.classList.remove("active");
-        });
-
-    document.getElementById(page)
-        .classList.add("active");
-
-    document.querySelectorAll("nav button")
-        .forEach(function(item){
-            item.classList.remove("active");
-        });
-
-    const navButton =
-        document.getElementById("nav-" + page);
-
-    if(navButton){
-        navButton.classList.add("active");
-    }
-
-    window.scrollTo(0,0);
-}
+let readBooks =
+    JSON.parse(localStorage.getItem("kitobxon_read")) || [];
 
 
-function bookDetails(title,author){
 
-    alert(
-        "📖 " + title +
-        "\n\n✍️ Muallif: " + author +
-        "\n\n📚 Batafsil ma'lumot, mavjud nusxalar va bron qilish funksiyasi keyingi bosqichda qo‘shiladi."
-    );
-}
+/* =========================
+   SERVER BILAN ULANISH
+========================= */
 
+const API_URL = window.location.origin;
 
-function message(text){
-    alert(text);
-}
+async function loadBooksFromServer(){
 
+    try{
 
-function searchBooks(value){
+        const response = await fetch(API_URL + "/api/books");
 
-    const results =
-        document.getElementById("searchResults");
+        if(!response.ok){
+            throw new Error("Server javobi xato");
+        }
 
-    const query =
-        value.trim().toLowerCase();
+        const result = await response.json();
 
-    if(!query){
+        if(result.success && Array.isArray(result.data)){
 
-        results.innerHTML =
-            '<div class="empty">Qidiruv so‘zini kiriting.</div>';
+            books = result.data.map(book => ({
+                ...book,
+                year: book.year ?? "",
+                copies: Number(book.copies ?? 0),
+                available: Number(book.available ?? book.copies ?? 0)
+            }));
 
-        return;
-    }
-
-    const found =
-        books.filter(function(book){
-
-            return (
-                book.title.toLowerCase().includes(query) ||
-                book.author.toLowerCase().includes(query) ||
-                book.genre.toLowerCase().includes(query)
+            localStorage.setItem(
+                "kitobxon_books",
+                JSON.stringify(books)
             );
 
-        });
+            renderBooks("booksList", books);
+            renderBooks("homeBooks", books.slice(0,5));
+            renderBooks("popularBooks", books.slice(1,6));
+
+            console.log("KITOBXON: serverdan kitoblar yuklandi", books);
+
+        }
+
+    }catch(error){
+
+        console.warn(
+            "Serverdan kitoblarni yuklashda xatolik:",
+            error
+        );
+
+    }
+}
+
+/* =========================
+   SAHIFA
+========================= */
+
+function showPage(id, button){
+
+    document.querySelectorAll(".page")
+        .forEach(p => p.classList.remove("active"));
+
+    const page = document.getElementById(id);
+
+    if(page){
+        page.classList.add("active");
+    }
+
+    document.querySelectorAll(".nav button")
+        .forEach(b => b.classList.remove("active"));
+
+    if(button){
+        button.classList.add("active");
+    }
+
+    if(id === "books"){
+        renderBooks("booksList", books);
+    }
+
+    if(id === "home"){
+        renderBooks("homeBooks", books.slice(0,5));
+        renderBooks("popularBooks", books.slice(1,6));
+    }
+
+    if(id === "admin"){
+        document.getElementById("adminBooks").textContent = books.length;
+    }
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+}
 
 
-    if(found.length === 0){
+/* =========================
+   KITOB KARTALARI
+========================= */
 
-        results.innerHTML =
-            '<div class="empty">Kitob topilmadi.</div>';
+function renderBooks(elementId, list){
+
+    const container = document.getElementById(elementId);
+
+    if(!container) return;
+
+    container.innerHTML = "";
+
+    if(list.length === 0){
+
+        container.innerHTML =
+        `<div class="notice">Kitob topilmadi.</div>`;
 
         return;
     }
 
+    list.forEach(book => {
 
-    results.innerHTML =
-        found.map(function(book){
+        const isFavorite = favorites.includes(book.id);
 
-            return `
-                <div class="card">
+        const card = document.createElement("div");
 
-                    <div class="cover">📖</div>
+        card.className = "book-card";
 
-                    <h3>${book.title}</h3>
+        card.innerHTML = `
 
-                    <p>Muallif: ${book.author}</p>
+            <div class="cover">
+                ${
+                    book.cover && book.cover.startsWith("data:image/")
+                    ? `<img src="${book.cover}" alt="${escapeHTML(book.title)}" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">`
+                    : `📖<br>${escapeHTML(book.title)}`
+                }
+            </div>
 
-                    <p>Janr: ${book.genre}</p>
+            <div class="book-info">
 
-                    <button
-                        onclick="bookDetails('${book.title}','${book.author}')">
-                        Batafsil
-                    </button>
+                <h3>${escapeHTML(book.title)}</h3>
 
-                </div>
-            `;
+                <p>✍️ ${escapeHTML(book.author)}</p>
 
-        }).join("");
+                <p>📚 ${escapeHTML(book.genre || "")}</p>
+
+                <p>📅 ${book.year || ""}</p>
+
+                <p>📦 Mavjud: ${book.available ?? 0}</p>
+
+                <button
+                    class="btn btn-primary btn-full"
+                    onclick="openReader(${book.id})">
+                    📖 O‘qishni boshlash
+                </button>
+
+                <button
+                    class="btn btn-light btn-full"
+                    onclick="toggleFavorite(${book.id})">
+                    ${isFavorite ? "⭐ Sevimlilarda" : "☆ Sevimlilarga qo‘shish"}
+                </button>
+
+                <button
+                    class="btn btn-light btn-full"
+                    onclick="editBook(${book.id})">
+                    ✏️ Tahrirlash
+                </button>
+
+                <button
+                    class="btn btn-light btn-full"
+                    onclick="deleteBook(${book.id})">
+                    🗑️ O‘chirish
+                </button>
+
+            </div>
+        `;
+
+        container.appendChild(card);
+
+    });
+
 }
 
+async function editBook(id){
 
-function quickSearch(value){
+    const book = books.find(x => x.id === id);
 
-    if(value.trim().length > 0){
+    if(!book) return;
 
-        showPage("search");
+    const title = prompt("Kitob nomi:", book.title);
+    if(title === null) return;
 
-        document.getElementById("searchInput").value =
-            value;
+    const author = prompt("Muallif:", book.author);
+    if(author === null) return;
 
-        searchBooks(value);
+    const genre = prompt("Janr:", book.genre || "");
+    if(genre === null) return;
+
+    const isbn = prompt("ISBN:", book.isbn || "");
+    if(isbn === null) return;
+
+    const year = prompt("Nashr yili:", book.year || "");
+    if(year === null) return;
+
+    const copies = prompt("Nusxalar soni:", book.copies || 1);
+    if(copies === null) return;
+
+    const description = prompt("Tavsif:", book.description || "");
+    if(description === null) return;
+
+    try{
+
+        const response = await fetch(API_URL + "/api/books/" + id, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                title: title.trim(),
+                author: author.trim(),
+                genre: genre.trim(),
+                isbn: isbn.trim(),
+                year: Number(year) || null,
+                library_id: book.library_id || 1,
+                address: book.address || "Toshbuloq",
+                inventory_number: book.inventory_number || "",
+                copies: Number(copies) || 1,
+                available: Number(book.available) || 0,
+                cover: book.cover || "",
+                description: description.trim()
+            })
+        });
+
+        const result = await response.json();
+
+        if(!response.ok || !result.success){
+            throw new Error(result.message || "Kitobni tahrirlab bo‘lmadi.");
+        }
+
+        await loadBooksFromServer();
+
+        alert("Kitob muvaffaqiyatli tahrirlandi.");
+
+    }catch(error){
+
+        console.error("Kitob tahrirlashda xatolik:", error);
+
+        alert("Kitob tahrirlashda xatolik: " + error.message);
     }
 }
 
+async function deleteBook(id){
+
+    const book = books.find(x => x.id === id);
+
+    if(!book) return;
+
+    if(!confirm(book.title + " kitobini o‘chirishni tasdiqlaysizmi?")) return;
+
+    try{
+
+        const response = await fetch(API_URL + "/api/books/" + id, {
+            method: "DELETE"
+        });
+
+        const result = await response.json();
+
+        if(!response.ok || !result.success){
+            throw new Error(result.message || "Kitobni o‘chirib bo‘lmadi.");
+        }
+
+        await loadBooksFromServer();
+
+        alert("✅ Kitob muvaffaqiyatli o‘chirildi.");
+
+    }catch(error){
+
+        console.error("Kitob o‘chirishda xatolik:", error);
+
+        alert("❌ Kitobni o‘chirishda xatolik: " + error.message);
+    }
+}
+
+/* =========================
+   QIDIRUV
+========================= */
+
+function searchBooks(){
+
+    const text =
+        document.getElementById("searchInput").value
+        .toLowerCase()
+        .trim();
+
+    const genre =
+        document.getElementById("genreFilter").value;
+
+    const result = books.filter(book => {
+
+        const matchesText =
+            book.title.toLowerCase().includes(text) ||
+            book.author.toLowerCase().includes(text) ||
+            book.isbn.toLowerCase().includes(text);
+
+        const matchesGenre =
+            !genre || book.genre === genre;
+
+        return matchesText && matchesGenre;
+
+    });
+
+    renderBooks("searchResults", result);
+}
+
+
+/* =========================
+   SEVIMLILAR
+========================= */
+
+function toggleFavorite(id){
+
+    if(favorites.includes(id)){
+
+        favorites =
+            favorites.filter(x => x !== id);
+
+    }else{
+
+        favorites.push(id);
+
+    }
+
+    localStorage.setItem(
+        "kitobxon_favorites",
+        JSON.stringify(favorites)
+    );
+
+    updateProfile();
+
+    renderBooks("booksList", books);
+}
+
+
+function readFileAsDataURL(file){
+    return new Promise((resolve,reject)=>{
+        const reader = new FileReader();
+
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = () => reject(new Error("Faylni o‘qib bo‘lmadi."));
+
+        reader.readAsDataURL(file);
+    });
+}
+
+async function addBook(){
+
+    const title =
+        document.getElementById("bookTitle").value.trim();
+
+    const author =
+        document.getElementById("bookAuthor").value.trim();
+
+    const genre =
+        document.getElementById("bookGenre").value;
+
+    const isbn =
+        document.getElementById("bookISBN").value.trim();
+
+    const year =
+        document.getElementById("bookYear").value;
+
+    const copies =
+        Number(document.getElementById("bookCopies").value) || 1;
+
+    const description =
+        document.getElementById("bookDescription").value.trim();
+
+    const coverFile =
+        document.getElementById("bookCover").files[0];
+
+    const bookFile =
+        document.getElementById("bookFile").files[0];
+
+    let cover = "";
+    let ebook_file = "";
+    let ebook_type = "";
+
+    if(coverFile){
+
+        if(coverFile.size > 2 * 1024 * 1024){
+            alert("Muqova rasmi 2 MB dan kichik bo‘lsin.");
+            return;
+        }
+
+        cover = await readFileAsDataURL(coverFile);
+    }
+
+    if(bookFile){
+
+        const isPDF =
+            bookFile.type === "application/pdf" ||
+            bookFile.name.toLowerCase().endsWith(".pdf");
+
+        const isEPUB =
+            bookFile.type === "application/epub+zip" ||
+            bookFile.name.toLowerCase().endsWith(".epub");
+
+        if(!isPDF && !isEPUB){
+            alert("Faqat PDF yoki EPUB fayl tanlang.");
+            return;
+        }
+
+        if(bookFile.size > 20 * 1024 * 1024){
+            alert("Elektron kitob 20 MB dan kichik bo‘lsin.");
+            return;
+        }
+
+        ebook_file = await readFileAsDataURL(bookFile);
+        ebook_type = isPDF ? "pdf" : "epub";
+    }
+
+    if(!title || !author){
+        alert("Kitob nomi va muallifni kiriting.");
+        return;
+    }
+
+    try{
+
+        const response = await fetch(API_URL + "/api/books", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                title: title,
+                author: author,
+                genre: genre,
+                isbn: isbn,
+                year: Number(year) || null,
+                library_id: 1,
+                address: "Toshbuloq",
+                inventory_number: "",
+                copies: copies,
+                cover: cover,
+                description: description,
+                ebook_file: ebook_file,
+                ebook_type: ebook_type
+            })
+        });
+
+        const result = await response.json();
+
+        if(!response.ok || !result.success){
+            throw new Error(
+                result.message || "Kitobni serverga qo‘shib bo‘lmadi."
+            );
+        }
+
+        await loadBooksFromServer();
+
+        document.getElementById("bookTitle").value = "";
+        document.getElementById("bookAuthor").value = "";
+        document.getElementById("bookISBN").value = "";
+        document.getElementById("bookYear").value = "";
+        document.getElementById("bookCopies").value = "1";
+        document.getElementById("bookDescription").value = "";
+        document.getElementById("bookCover").value = "";
+        document.getElementById("bookFile").value = "";
+
+        alert(
+            ebook_file
+            ? "✅ Kitob va elektron fayl server bazasiga muvaffaqiyatli qo‘shildi."
+            : "✅ Kitob server bazasiga muvaffaqiyatli qo‘shildi."
+        );
+
+    }catch(error){
+
+        console.error("Kitob qo‘shishda xatolik:", error);
+
+        alert(
+            "❌ Kitob qo‘shishda xatolik: " + error.message
+        );
+    }
+}
+
+/* =========================
+   ELEKTRON KITOB
+========================= */
+
+const readerPages = [
+
+`O‘tkan kunlar
+
+Abdulla Qodiriy
+
+Bu elektron kitob o‘qish oynasining namunaviy sahifasidir.
+
+KITOBXON tizimida elektron kitoblarni ilova ichida o‘qish imkoniyati yaratiladi.`,
+
+`Kitob o‘qish
+
+O‘quvchi kitobni ilova ichida ochadi va sahifalar bo‘yicha o‘qiydi.
+
+O‘qish jarayoni saqlanadi.`,
+
+`Mundarija
+
+1. Kirish
+2. Asosiy qism
+3. Voqealar rivoji
+4. Yakuniy qism`,
+
+`KITOBXON imkoniyatlari
+
+• Kitob o‘qish
+• Sahifani almashtirish
+• Shriftni kattalashtirish
+• Shriftni kichraytirish
+• O‘qilgan joyni saqlash`,
+
+`O‘qish yakuni
+
+Keyinchalik ushbu namunaviy matn o‘rniga serverdan haqiqiy PDF yoki EPUB elektron kitob yuklanadi.`
+];
+
+let currentReaderPage = 0;
+let readerFontSize = 18;
+let readerDark = false;
+
+
+function openReader(id){
+
+    const book = books.find(x => x.id === id);
+
+    if(!book) return;
+
+    document.getElementById("readerTitle")
+        .textContent = "📖 " + book.title;
+
+    currentReaderPage = 0;
+
+    if(!readBooks.includes(id)){
+
+        readBooks.push(id);
+
+        localStorage.setItem(
+            "kitobxon_read",
+            JSON.stringify(readBooks)
+        );
+
+    }
+
+    showPage("reader");
+
+    const readerText = document.getElementById("readerText");
+
+    if(book.ebook_type === "pdf" && book.ebook_file){
+
+        readerText.innerHTML = `
+            <iframe
+                src="${book.ebook_file}"
+                style="width:100%;height:75vh;border:0;border-radius:12px;background:#fff;"
+                title="${escapeHTML(book.title)}">
+            </iframe>
+        `;
+
+        document.getElementById("pageNumber").textContent = "PDF";
+
+    }else{
+
+        renderReader();
+
+    }
+
+    updateProfile();
+}
+
+
+function renderReader(){
+
+    document.getElementById("readerText")
+        .textContent = readerPages[currentReaderPage];
+
+    document.getElementById("pageNumber")
+        .textContent =
+        `${currentReaderPage + 1} / ${readerPages.length}`;
+
+    document.getElementById("readerText")
+        .style.fontSize = readerFontSize + "px";
+}
+
+
+function nextPage(){
+
+    if(currentReaderPage < readerPages.length - 1){
+
+        currentReaderPage++;
+
+        renderReader();
+
+    }
+
+}
+
+
+function previousPage(){
+
+    if(currentReaderPage > 0){
+
+        currentReaderPage--;
+
+        renderReader();
+
+    }
+
+}
+
+
+function changeFont(value){
+
+    readerFontSize += value;
+
+    if(readerFontSize < 12)
+        readerFontSize = 12;
+
+    if(readerFontSize > 30)
+        readerFontSize = 30;
+
+    renderReader();
+}
+
+
+function toggleReaderTheme(){
+
+    readerDark = !readerDark;
+
+    const readerText =
+        document.getElementById("readerText");
+
+    if(readerDark){
+
+        readerText.style.background = "#202b27";
+        readerText.style.color = "#ffffff";
+
+    }else{
+
+        readerText.style.background = "#fffdf5";
+        readerText.style.color = "#173b2b";
+
+    }
+}
+
+
+/* =========================
+   PROFIL
+========================= */
+
+function updateProfile(){
+
+    document.getElementById("favCount")
+        .textContent = favorites.length;
+
+    document.getElementById("reservationCount")
+        
+
+    document.getElementById("readCount")
+        .textContent = readBooks.length;
+
+    document.getElementById("adminBooks")
+        .textContent = books.length;
+}
+
+
+/* =========================
+   TIL
+========================= */
+
+const translations = {
+
+    uz:{
+        subtitle:"Elektron kutubxona tizimi",
+        hero:"Kitob olamiga xush kelibsiz!",
+        text:"KITOBXON — zamonaviy elektron kutubxona tizimi."
+    },
+
+    ru:{
+        subtitle:"Электронная библиотечная система",
+        hero:"Добро пожаловать в мир книг!",
+        text:"KITOBXON — современная электронная библиотечная система."
+    },
+
+    en:{
+        subtitle:"Electronic library system",
+        hero:"Welcome to the world of books!",
+        text:"KITOBXON — a modern electronic library system."
+    }
+
+};
+
+
+function setLanguage(lang){
+
+    const t = translations[lang];
+
+    document.getElementById("brandSubtitle")
+        .textContent = t.subtitle;
+
+    document.getElementById("heroTitle")
+        .textContent = t.hero;
+
+    document.getElementById("heroText")
+        .textContent = t.text;
+
+}
+
+
+/* =========================
+   XAVFSIZ HTML
+========================= */
+
+function escapeHTML(value){
+
+    return String(value)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+
+}
+
+
+/* =========================
+   BOSHLANG‘ICH ISHGA TUSHISH
+========================= */
+
+function init(){
+
+    renderBooks(
+        "homeBooks",
+        books.slice(0,5)
+    );
+
+    renderBooks(
+        "popularBooks",
+        books.slice(1,6)
+    );
+
+    renderBooks(
+        "booksList",
+        books
+    );
+
+    renderBooks(
+        "searchResults",
+        books
+    );
+
+
+    updateProfile();
+
+    renderReader();
+
+}
+
+init();
+
+
+loadBooksFromServer();
 </script>
 
 </body>
