@@ -1,0 +1,4 @@
+node_modules/
+*.db
+Kitobxon_app_before_*.html
+server_before_*.js

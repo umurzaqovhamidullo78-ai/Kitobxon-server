@@ -171,8 +171,25 @@ app.post("/api/libraries", (req, res) => {
 app.get("/api/books", (req, res) => {
     const books = db.prepare(`
         SELECT
-            books.*,
-            libraries.name AS library_name
+            books.id,
+            books.title,
+            books.author,
+            books.genre,
+            books.isbn,
+            books.year,
+            books.library_id,
+            books.address,
+            books.inventory_number,
+            books.copies,
+            books.available,
+            books.description,
+            books.created_at,
+            libraries.name AS library_name,
+            CASE
+                WHEN books.cover IS NOT NULL AND books.cover != ''
+                THEN '/api/books/' || books.id || '/cover'
+                ELSE ''
+            END AS cover_url
         FROM books
         LEFT JOIN libraries
             ON books.library_id = libraries.id
@@ -520,12 +537,44 @@ app.post("/api/news", (req, res) => {
 });
 
 // ===============================
+// BOOK COVER
+app.get("/api/books/:id/cover", (req, res) => {
+    const book = db.prepare(`
+        SELECT cover
+        FROM books
+        WHERE id = ?
+    `).get(req.params.id);
+
+    if (!book || !book.cover) {
+        return res.status(404).json({
+            success: false,
+            message: "Bu kitob uchun muqova mavjud emas"
+        });
+    }
+
+    const match = book.cover.match(/^data:(image\/[a-zA-Z0-9.+-]+);base64,(.+)$/);
+
+    if (!match) {
+        return res.status(404).json({
+            success: false,
+            message: "Muqova formati noto‘g‘ri"
+        });
+    }
+
+    const mime = match[1];
+    const buffer = Buffer.from(match[2], "base64");
+
+    res.set("Content-Type", mime);
+    res.set("Cache-Control", "public, max-age=86400");
+    res.send(buffer);
+});
+
 // PDF FILES
 // ===============================
 
 app.get("/api/books/:id/pdf", (req, res) => {
     const book = db.prepare(`
-        SELECT id, title
+        SELECT id, title, ebook_file, ebook_type
         FROM books
         WHERE id = ?
     `).get(req.params.id);
@@ -537,16 +586,39 @@ app.get("/api/books/:id/pdf", (req, res) => {
         });
     }
 
-    const pdfPath = path.join(__dirname, "pdf", `${book.id}.pdf`);
+    if (book.ebook_type !== "pdf" || !book.ebook_file) {
+        return res.status(404).json({
+            success: false,
+            message: "Bu kitob uchun PDF fayl mavjud emas"
+        });
+    }
 
-    res.sendFile(pdfPath, (err) => {
-        if (err && !res.headersSent) {
-            res.status(404).json({
-                success: false,
-                message: "Bu kitob uchun PDF fayl mavjud emas"
-            });
-        }
-    });
+    const match = book.ebook_file.match(/^data:application\/pdf;base64,(.+)$/s);
+
+    if (!match) {
+        return res.status(400).json({
+            success: false,
+            message: "PDF ma'lumoti noto'g'ri formatda"
+        });
+    }
+
+    try {
+        const pdfBuffer = Buffer.from(match[1], "base64");
+
+        res.setHeader("Content-Type", "application/pdf");
+        res.setHeader("Content-Length", pdfBuffer.length);
+        res.setHeader("Content-Disposition", `inline; filename="book-${book.id}.pdf"`);
+        res.setHeader("Cache-Control", "public, max-age=3600");
+
+        res.send(pdfBuffer);
+    } catch (error) {
+        console.error("PDF decode xatosi:", error);
+
+        res.status(500).json({
+            success: false,
+            message: "PDF faylni ochishda xatolik"
+        });
+    }
 });
 
 // ===============================

@@ -1140,8 +1140,8 @@ function renderBooks(elementId, list){
 
             <div class="cover">
                 ${
-                    book.cover && book.cover.startsWith("data:image/")
-                    ? `<img src="${book.cover}" alt="${escapeHTML(book.title)}" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">`
+                    book.cover_url
+                    ? `<img src="${escapeHTML(book.cover_url.startsWith("http") ? book.cover_url : API_URL + book.cover_url)}" alt="${escapeHTML(book.title)}" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">`
                     : `📖<br>${escapeHTML(book.title)}`
                 }
             </div>
@@ -1564,11 +1564,11 @@ function openReader(id){
 
     const readerText = document.getElementById("readerText");
 
-    if(book.ebook_type === "pdf" && book.ebook_file){
+    if(book.ebook_type === "pdf"){
 
         readerText.innerHTML = `
             <iframe
-                src="${book.ebook_file}"
+                src="${API_URL}/api/books/${id}/pdf"
                 style="width:100%;height:75vh;border:0;border-radius:12px;background:#fff;"
                 title="${escapeHTML(book.title)}">
             </iframe>
