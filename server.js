@@ -959,6 +959,58 @@ app.get("/api/books/:id/pdf", (req, res) => {
     }
 });
 
+// EPUB FILES
+// ===============================
+
+app.get("/api/books/:id/epub", (req, res) => {
+    const book = db.prepare(`
+        SELECT id, title, ebook_file, ebook_type
+        FROM books
+        WHERE id = ?
+    `).get(req.params.id);
+
+    if (!book) {
+        return res.status(404).json({
+            success: false,
+            message: "Kitob topilmadi"
+        });
+    }
+
+    if (book.ebook_type !== "epub" || !book.ebook_file) {
+        return res.status(404).json({
+            success: false,
+            message: "Bu kitob uchun EPUB fayl mavjud emas"
+        });
+    }
+
+    const match = book.ebook_file.match(/^data:application\/epub\+zip;base64,(.+)$/s);
+
+    if (!match) {
+        return res.status(400).json({
+            success: false,
+            message: "EPUB ma'lumoti noto'g'ri formatda"
+        });
+    }
+
+    try {
+        const epubBuffer = Buffer.from(match[1], "base64");
+
+        res.setHeader("Content-Type", "application/epub+zip");
+        res.setHeader("Content-Length", epubBuffer.length);
+        res.setHeader("Content-Disposition", `inline; filename="book-${book.id}.epub"`);
+        res.setHeader("Cache-Control", "public, max-age=3600");
+
+        res.send(epubBuffer);
+    } catch (error) {
+        console.error("EPUB decode xatosi:", error);
+
+        res.status(500).json({
+            success: false,
+            message: "EPUB faylni ochishda xatolik"
+        });
+    }
+});
+
 // ADMIN: BARCHA FOYDALANUVCHILAR
 // ===============================
 
