@@ -2854,10 +2854,17 @@ async function editBook(id){
 
     try{
 
+        const token = localStorage.getItem("kitobxon_token");
+        if(!token){
+            alert("Avval tizimga kiring.");
+            return;
+        }
+
         const response = await fetch(API_URL + "/api/books/" + id, {
             method: "PUT",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + token
             },
             body: JSON.stringify({
                 title: title.trim(),
@@ -2903,8 +2910,17 @@ async function deleteBook(id){
 
     try{
 
+        const token = localStorage.getItem("kitobxon_token");
+        if(!token){
+            alert("Avval tizimga kiring.");
+            return;
+        }
+
         const response = await fetch(API_URL + "/api/books/" + id, {
-            method: "DELETE"
+            method: "DELETE",
+            headers: {
+                "Authorization": "Bearer " + token
+            }
         });
 
         const result = await response.json();
@@ -3071,10 +3087,17 @@ async function addBook(){
 
     try{
 
+        const token = localStorage.getItem("kitobxon_token");
+        if(!token){
+            alert("Avval tizimga kiring.");
+            return;
+        }
+
         const response = await fetch(API_URL + "/api/books", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + token
             },
             body: JSON.stringify({
                 title: title,
