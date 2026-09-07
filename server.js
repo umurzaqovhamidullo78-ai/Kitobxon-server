@@ -1,7 +1,43 @@
 const path = require("path");
+const crypto = require("crypto");
 const express = require("express");
 const cors = require("cors");
 const Database = require("better-sqlite3");
+const multer = require("multer");
+const fs = require("fs");
+
+const uploadDir = path.join(__dirname, "uploads", "news");
+fs.mkdirSync(uploadDir, { recursive: true });
+
+const upload = multer({
+    dest: uploadDir,
+    limits: { fileSize: 10 * 1024 * 1024 }
+});
+
+
+function hashPassword(password) {
+    const salt = crypto.randomBytes(16).toString("hex");
+    const hash = crypto.scryptSync(password, salt, 64).toString("hex");
+    return `scrypt$${salt}$${hash}`;
+}
+
+function verifyPassword(password, stored) {
+    const parts = String(stored || "").split("$");
+
+    if (parts.length !== 3 || parts[0] !== "scrypt") {
+        return false;
+    }
+
+    const salt = parts[1];
+    const storedHash = parts[2];
+
+    const hash = crypto.scryptSync(password, salt, 64).toString("hex");
+
+    return crypto.timingSafeEqual(
+        Buffer.from(hash, "hex"),
+        Buffer.from(storedHash, "hex")
+    );
+}
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -9,6 +45,7 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json({ limit: "30mb" }));
 app.use(express.static(__dirname));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 const db = new Database("kitobxon.db");
 
@@ -80,6 +117,39 @@ CREATE TABLE IF NOT EXISTS news (
     image TEXT,
     created_at TEXT DEFAULT CURRENT_TIMESTAMP
 );
+`);
+
+// ===============================
+// AUTH DATABASE MIGRATION
+// ===============================
+
+const userColumns = db.prepare("PRAGMA table_info(users)").all().map(c => c.name);
+
+if (!userColumns.includes("library_id")) {
+    db.exec("ALTER TABLE users ADD COLUMN library_id INTEGER");
+}
+
+if (!userColumns.includes("approved")) {
+    db.exec("ALTER TABLE users ADD COLUMN approved INTEGER NOT NULL DEFAULT 0");
+}
+
+if (!userColumns.includes("approved_by")) {
+    db.exec("ALTER TABLE users ADD COLUMN approved_by INTEGER");
+}
+
+if (!userColumns.includes("approved_at")) {
+    db.exec("ALTER TABLE users ADD COLUMN approved_at TEXT");
+}
+
+db.exec(`
+    CREATE TABLE IF NOT EXISTS sessions (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER NOT NULL,
+        token_hash TEXT UNIQUE NOT NULL,
+        expires_at TEXT NOT NULL,
+        created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY(user_id) REFERENCES users(id)
+    )
 `);
 
 // ===============================
@@ -164,6 +234,82 @@ app.post("/api/libraries", (req, res) => {
     });
 });
 
+
+app.put("/api/libraries/:id", (req, res) => {
+
+    const { id } = req.params;
+
+    const {
+        name,
+        region,
+        district,
+        address,
+        phone,
+        work_time
+    } = req.body;
+
+    if (!name) {
+        return res.status(400).json({
+            success: false,
+            message: "Kutubxona nomi kerak"
+        });
+    }
+
+    const result = db.prepare(`
+        UPDATE libraries
+        SET
+            name = ?,
+            region = ?,
+            district = ?,
+            address = ?,
+            phone = ?,
+            work_time = ?
+        WHERE id = ?
+    `).run(
+        name,
+        region || "",
+        district || "",
+        address || "",
+        phone || "",
+        work_time || "",
+        id
+    );
+
+    if (result.changes === 0) {
+        return res.status(404).json({
+            success: false,
+            message: "Kutubxona topilmadi"
+        });
+    }
+
+    res.json({
+        success: true,
+        message: "Kutubxona yangilandi"
+    });
+});
+
+
+app.delete("/api/libraries/:id", (req, res) => {
+
+    const { id } = req.params;
+
+    const result = db
+        .prepare("DELETE FROM libraries WHERE id = ?")
+        .run(id);
+
+    if (result.changes === 0) {
+        return res.status(404).json({
+            success: false,
+            message: "Kutubxona topilmadi"
+        });
+    }
+
+    res.json({
+        success: true,
+        message: "Kutubxona o‘chirildi"
+    });
+});
+
 // ===============================
 // BOOKS
 // ===============================
@@ -183,6 +329,7 @@ app.get("/api/books", (req, res) => {
             books.copies,
             books.available,
             books.description,
+            books.ebook_type,
             books.created_at,
             libraries.name AS library_name,
             CASE
@@ -259,7 +406,7 @@ app.get("/api/books/:id", (req, res) => {
 });
 
 // ADD BOOK
-app.post("/api/books", (req, res) => {
+app.post("/api/books", requireAuth, requireLibraryPermission, (req, res) => {
     const {
         title,
         author,
@@ -329,7 +476,7 @@ app.post("/api/books", (req, res) => {
 });
 
 // UPDATE BOOK
-app.put("/api/books/:id", (req, res) => {
+app.put("/api/books/:id", requireAuth, requireLibraryPermission, (req, res) => {
     const {
         title,
         author,
@@ -386,7 +533,7 @@ app.put("/api/books/:id", (req, res) => {
 });
 
 // DELETE BOOK
-app.delete("/api/books/:id", (req, res) => {
+app.delete("/api/books/:id", requireAuth, requireLibraryPermission, (req, res) => {
     const result = db
         .prepare("DELETE FROM books WHERE id = ?")
         .run(req.params.id);
@@ -408,7 +555,7 @@ app.post("/api/users", (req, res) => {
         name,
         phone,
         password,
-        role
+        library_id
     } = req.body;
 
     if (!name || !phone || !password) {
@@ -419,27 +566,182 @@ app.post("/api/users", (req, res) => {
     }
 
     try {
+        const passwordHash = hashPassword(password);
+
         const result = db.prepare(`
             INSERT INTO users
-            (name, phone, password, role)
-            VALUES (?, ?, ?, ?)
+            (name, phone, password, role, library_id, approved)
+            VALUES (?, ?, ?, 'reader', ?, 1)
         `).run(
-            name,
-            phone,
-            password,
-            role || "reader"
+            name.trim(),
+            phone.trim(),
+            passwordHash,
+            library_id || null
         );
 
         res.json({
             success: true,
-            id: result.lastInsertRowid
+            id: result.lastInsertRowid,
+            role: "reader",
+            approved: 1
         });
+
     } catch (error) {
+        console.error("Foydalanuvchi ro‘yxatdan o‘tishda xato:", error);
+
         res.status(400).json({
             success: false,
             message: "Bu telefon raqami allaqachon ro‘yxatdan o‘tgan"
         });
     }
+});
+
+// ===============================
+// AUTH: LOGIN / SESSION
+// ===============================
+
+function getTokenFromRequest(req) {
+    const header = req.headers.authorization || "";
+
+    if (!header.startsWith("Bearer ")) {
+        return null;
+    }
+
+    return header.slice(7).trim();
+}
+
+function getCurrentUser(req) {
+    const token = getTokenFromRequest(req);
+
+    if (!token) return null;
+
+    const tokenHash = crypto
+        .createHash("sha256")
+        .update(token)
+        .digest("hex");
+
+    const session = db.prepare(`
+        SELECT
+            sessions.id AS session_id,
+            sessions.expires_at,
+            users.id,
+            users.name,
+            users.phone,
+            users.role,
+            users.library_id,
+            users.approved
+        FROM sessions
+        JOIN users ON users.id = sessions.user_id
+        WHERE sessions.token_hash = ?
+          AND sessions.expires_at > datetime('now')
+    `).get(tokenHash);
+
+    return session || null;
+}
+
+function requireAuth(req, res, next) {
+    const user = getCurrentUser(req);
+
+    if (!user) {
+        return res.status(401).json({
+            success: false,
+            message: "Avval tizimga kiring"
+        });
+    }
+
+    req.user = user;
+    next();
+}
+
+app.post("/api/login", (req, res) => {
+    const { phone, password } = req.body;
+
+    if (!phone || !password) {
+        return res.status(400).json({
+            success: false,
+            message: "Telefon va parol kerak"
+        });
+    }
+
+    const user = db.prepare(`
+        SELECT *
+        FROM users
+        WHERE phone = ?
+    `).get(phone.trim());
+
+    if (!user || !verifyPassword(password, user.password)) {
+        return res.status(401).json({
+            success: false,
+            message: "Telefon yoki parol noto‘g‘ri"
+        });
+    }
+
+    const token = crypto.randomBytes(32).toString("hex");
+
+    const tokenHash = crypto
+        .createHash("sha256")
+        .update(token)
+        .digest("hex");
+
+    const expiresAt = new Date(
+        Date.now() + 7 * 24 * 60 * 60 * 1000
+    ).toISOString();
+
+    db.prepare(`
+        INSERT INTO sessions
+        (user_id, token_hash, expires_at)
+        VALUES (?, ?, ?)
+    `).run(
+        user.id,
+        tokenHash,
+        expiresAt
+    );
+
+    res.json({
+        success: true,
+        token,
+        user: {
+            id: user.id,
+            name: user.name,
+            phone: user.phone,
+            role: user.role,
+            library_id: user.library_id,
+            approved: !!user.approved
+        }
+    });
+});
+
+app.get("/api/me", requireAuth, (req, res) => {
+    res.json({
+        success: true,
+        user: {
+            id: req.user.id,
+            name: req.user.name,
+            phone: req.user.phone,
+            role: req.user.role,
+            library_id: req.user.library_id,
+            approved: !!req.user.approved
+        }
+    });
+});
+
+app.post("/api/logout", requireAuth, (req, res) => {
+    const token = getTokenFromRequest(req);
+
+    const tokenHash = crypto
+        .createHash("sha256")
+        .update(token)
+        .digest("hex");
+
+    db.prepare(`
+        DELETE FROM sessions
+        WHERE token_hash = ?
+    `).run(tokenHash);
+
+    res.json({
+        success: true,
+        message: "Tizimdan chiqildi"
+    });
 });
 
 // ===============================
@@ -506,12 +808,15 @@ app.get("/api/news", (req, res) => {
     });
 });
 
-app.post("/api/news", (req, res) => {
+app.post("/api/news", upload.single("image"), (req, res) => {
     const {
         title,
-        text,
-        image
+        text
     } = req.body;
+
+    const image = req.file
+        ? "/uploads/news/" + req.file.filename
+        : "";
 
     if (!title || !text) {
         return res.status(400).json({
@@ -572,6 +877,8 @@ app.get("/api/books/:id/cover", (req, res) => {
 // PDF FILES
 // ===============================
 
+const pdfCache = new Map();
+
 app.get("/api/books/:id/pdf", (req, res) => {
     const book = db.prepare(`
         SELECT id, title, ebook_file, ebook_type
@@ -603,7 +910,12 @@ app.get("/api/books/:id/pdf", (req, res) => {
     }
 
     try {
-        const pdfBuffer = Buffer.from(match[1], "base64");
+        let pdfBuffer = pdfCache.get(book.id);
+
+        if (!pdfBuffer) {
+            pdfBuffer = Buffer.from(match[1], "base64");
+            pdfCache.set(book.id, pdfBuffer);
+        }
 
         res.setHeader("Content-Type", "application/pdf");
         res.setHeader("Content-Length", pdfBuffer.length);
@@ -621,6 +933,29 @@ app.get("/api/books/:id/pdf", (req, res) => {
     }
 });
 
+// ADMIN: BARCHA FOYDALANUVCHILAR
+// ===============================
+
+app.get("/api/admin/users", requireAuth, (req, res) => {
+    if (!["district_admin", "region_admin", "republic_admin"].includes(req.user.role)) {
+        return res.status(403).json({
+            success: false,
+            message: "Sizda bu amal uchun ruxsat yo‘q"
+        });
+    }
+
+    const users = db.prepare(`
+        SELECT id, name, phone, role, created_at
+        FROM users
+        ORDER BY id DESC
+    `).all();
+
+    res.json({
+        success: true,
+        data: users
+    });
+});
+
 // ===============================
 // SERVER
 // ===============================
@@ -628,3 +963,243 @@ app.get("/api/books/:id/pdf", (req, res) => {
 app.listen(PORT, "0.0.0.0", () => {
     console.log(`Kitobxon server ${PORT}-portda ishga tushdi`);
 });
+
+// ===============================
+
+// ===============================
+
+// ===============================
+// ADMIN: OPERATOR YARATISH
+// ===============================
+
+app.post("/api/admin/operators", requireAuth, (req, res) => {
+    if (!["district_admin", "region_admin", "republic_admin"].includes(req.user.role)) {
+        return res.status(403).json({
+            success: false,
+            message: "Sizda operator yaratish uchun ruxsat yo‘q"
+        });
+    }
+
+    const { name, phone, password, library_id } = req.body;
+
+    if (!name || !phone || !password) {
+        return res.status(400).json({
+            success: false,
+            message: "Ism, telefon va parol kerak"
+        });
+    }
+
+    try {
+        const passwordHash = hashPassword(password);
+
+        const result = db.prepare(`
+            INSERT INTO users
+            (name, phone, password, role, library_id, approved)
+            VALUES (?, ?, ?, 'operator', ?, 0)
+        `).run(
+            name.trim(),
+            phone.trim(),
+            passwordHash,
+            library_id || null
+        );
+
+        res.json({
+            success: true,
+            id: result.lastInsertRowid,
+            role: "operator",
+            approved: false,
+            message: "Operator yaratildi. Administrator tasdig‘ini kutmoqda."
+        });
+
+    } catch (error) {
+        console.error("Operator yaratishda xato:", error);
+
+        res.status(400).json({
+            success: false,
+            message: "Bu telefon raqami allaqachon ro‘yxatdan o‘tgan"
+        });
+    }
+});
+
+
+// ===============================
+// ADMIN: OPERATORNI TASDIQLASH
+// ===============================
+
+app.post("/api/admin/users/:id/approve", requireAuth, (req, res) => {
+    if (!["district_admin", "region_admin", "republic_admin"].includes(req.user.role)) {
+        return res.status(403).json({
+            success: false,
+            message: "Sizda operatorni tasdiqlash uchun ruxsat yo‘q"
+        });
+    }
+
+    const userId = Number(req.params.id);
+    const libraryId = Number(req.body?.library_id);
+
+    if (!userId || !libraryId) {
+        return res.status(400).json({
+            success: false,
+            message: "Foydalanuvchi ID va kutubxona ID kerak"
+        });
+    }
+
+    const targetUser = db.prepare(`
+        SELECT id, name, phone, role, library_id, approved
+        FROM users
+        WHERE id = ?
+    `).get(userId);
+
+    if (!targetUser) {
+        return res.status(404).json({
+            success: false,
+            message: "Foydalanuvchi topilmadi"
+        });
+    }
+
+    if (targetUser.role !== "operator" && targetUser.role !== "admin") {
+        return res.status(400).json({
+            success: false,
+            message: "Faqat operator yoki admin akkauntini tasdiqlash mumkin"
+        });
+    }
+
+    const library = db.prepare(`
+        SELECT id, name
+        FROM libraries
+        WHERE id = ?
+    `).get(libraryId);
+
+    if (!library) {
+        return res.status(404).json({
+            success: false,
+            message: "Kutubxona topilmadi"
+        });
+    }
+
+    db.prepare(`
+        UPDATE users
+        SET
+            approved = 1,
+            library_id = ?,
+            approved_by = ?,
+            approved_at = datetime('now')
+        WHERE id = ?
+    `).run(
+        libraryId,
+        req.user.id,
+        userId
+    );
+
+    res.json({
+        success: true,
+        message: "Operator tasdiqlandi va kutubxonaga biriktirildi",
+        user: {
+            id: targetUser.id,
+            name: targetUser.name,
+            phone: targetUser.phone,
+            role: targetUser.role,
+            library_id: libraryId,
+            library_name: library.name,
+            approved: true,
+            approved_by: req.user.id
+        }
+    });
+});
+
+// ADMIN: KUTILAYOTGAN OPERATORLAR
+// ===============================
+
+app.get("/api/admin/pending-users", requireAuth, (req, res) => {
+    if (!["district_admin", "region_admin", "republic_admin"].includes(req.user.role)) {
+        return res.status(403).json({
+            success: false,
+            message: "Sizda bu amal uchun ruxsat yo‘q"
+        });
+    }
+
+    const users = db.prepare(`
+        SELECT
+            id,
+            name,
+            phone,
+            role,
+            library_id,
+            approved,
+            created_at
+        FROM users
+        WHERE approved = 0
+        ORDER BY id DESC
+    `).all();
+
+    res.json({
+        success: true,
+        data: users
+    });
+});
+
+// PERMISSIONS
+// ===============================
+
+// ===============================
+// PERMISSIONS
+// ===============================
+
+function requireLibraryPermission(req, res, next) {
+    const user = req.user;
+
+    if (!user) {
+        return res.status(401).json({
+            success: false,
+            message: "Avval tizimga kiring"
+        });
+    }
+
+    if (!user.approved) {
+        return res.status(403).json({
+            success: false,
+            message: "Akkauntingiz hali administrator tomonidan tasdiqlanmagan"
+        });
+    }
+
+    const allowedRoles = [
+        "operator",
+        "admin",
+        "district_admin",
+        "region_admin",
+        "republic_admin"
+    ];
+
+    if (!allowedRoles.includes(user.role)) {
+        return res.status(403).json({
+            success: false,
+            message: "Sizda bu amal uchun ruxsat yo‘q"
+        });
+    }
+
+    const targetLibraryId =
+        req.body?.library_id ||
+        req.params?.library_id ||
+        req.params?.id && db.prepare(
+            "SELECT library_id FROM books WHERE id = ?"
+        ).get(req.params.id)?.library_id;
+
+    if (!targetLibraryId) {
+        return res.status(400).json({
+            success: false,
+            message: "Kutubxona aniqlanmadi"
+        });
+    }
+
+    if (user.role === "operator" || user.role === "admin") {
+        if (Number(user.library_id) !== Number(targetLibraryId)) {
+            return res.status(403).json({
+                success: false,
+                message: "Siz faqat o‘zingizga biriktirilgan kutubxonani boshqara olasiz"
+            });
+        }
+    }
+
+    req.targetLibraryId = Number(targetLibraryId);
+    next();
+}

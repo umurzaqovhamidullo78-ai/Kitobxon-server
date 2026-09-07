@@ -1320,6 +1320,8 @@ textarea{
         <h2>📰 Yangiliklar</h2>
     </div>
 
+    <div id="homeNews" class="cards"></div>
+
 </section>
 
 
@@ -1537,6 +1539,18 @@ textarea{
 </section>
 
 
+<!-- NEWS -->
+<section id="news" class="page">
+    <div class="section-title">
+        <button class="btn btn-light" onclick="showPage('home')" style="float:right;margin-bottom:10px;">
+            ← Orqaga
+        </button>
+        <h2>📰 Yangiliklar</h2>
+    </div>
+
+    <div id="newsList" class="cards"></div>
+</section>
+
 <!-- ADMIN -->
 
 <section id="admin" class="page">
@@ -1649,6 +1663,32 @@ textarea{
 
             </div>
 
+        </div>
+
+        <div class="info-card">
+            <h3>📰 Yangiliklarni boshqarish</h3>
+            <p>Yangi xabar va e’lonlarni qo‘shish.</p>
+
+            <div class="form">
+                <div class="form-group">
+                    <label>📝 Yangilik nomi</label>
+                    <input id="newsTitle" type="text" placeholder="Masalan: Yangi kitoblar keldi">
+                </div>
+
+                <div class="form-group">
+                    <label>📄 Yangilik matni</label>
+                    <textarea id="newsText" rows="5" placeholder="Yangilik mazmunini yozing..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>🖼️ Yangilik rasmi (ixtiyoriy)</label>
+                    <input id="newsImageFile" type="file" accept="image/*">
+                </div>
+
+                <button class="btn btn-primary" type="button" onclick="addNews()">
+                    💾 Yangilikni saqlash
+                </button>
+            </div>
         </div>
 
         <div class="info-card" onclick="showPage('users',this)" style="cursor:pointer;">
@@ -1975,6 +2015,10 @@ function showPage(id, button){
 
     if(id === "books"){
         renderBooks("booksList", books);
+    }
+
+    if(id === "news"){
+        loadNews();
     }
 
     if(id === "libraries"){
@@ -3658,6 +3702,81 @@ init();
 
 
 loadBooksFromServer();
+
+
+async function loadNews(){
+    const container=document.getElementById("newsList") || document.getElementById("homeNews");
+    if(!container) return;
+
+    try{
+        const response=await fetch(API_URL+"/api/news");
+        const result=await response.json();
+
+        if(!result.success){
+            throw new Error("Yangiliklarni yuklab bo‘lmadi.");
+        }
+
+        const news=result.data || [];
+
+        if(news.length===0){
+            container.innerHTML='<div class="notice">Hozircha yangiliklar yo‘q.</div>';
+            return;
+        }
+
+        container.innerHTML=news.map(item=>`
+            <div class="info-card">
+                ${item.image ? `<img src="${item.image}" alt="" style="width:100%;max-height:220px;object-fit:cover;border-radius:12px;margin-bottom:12px;">` : ""}
+                <h3>📰 ${item.title}</h3>
+                <p>${item.text}</p>
+            </div>
+        `).join("");
+    }catch(error){
+        console.error("Yangiliklarni yuklash xatosi:",error);
+        container.innerHTML='<div class="notice">Yangiliklarni yuklab bo‘lmadi.</div>';
+    }
+}
+
+async function addNews(){
+    const title=document.getElementById("newsTitle")?.value.trim();
+    const text=document.getElementById("newsText")?.value.trim();
+    const imageFile=document.getElementById("newsImageFile")?.files[0];
+
+    if(!title || !text){
+        alert("Yangilik nomi va matnini kiriting.");
+        return;
+    }
+
+    try{
+        const formData=new FormData();
+        formData.append("title",title);
+        formData.append("text",text);
+
+        if(imageFile){
+            formData.append("image",imageFile);
+        }
+
+        const response=await fetch(API_URL+"/api/news",{
+            method:"POST",
+            body:formData
+        });
+
+        const result=await response.json();
+
+        if(!response.ok || !result.success){
+            throw new Error(result.message || "Yangilikni saqlab bo‘lmadi.");
+        }
+
+        document.getElementById("newsTitle").value="";
+        document.getElementById("newsText").value="";
+        document.getElementById("newsImageFile").value="";
+
+        alert("✅ Yangilik muvaffaqiyatli saqlandi.");
+    }catch(error){
+        console.error("Yangilik saqlash xatosi:",error);
+        alert("❌ Yangilikni saqlab bo‘lmadi.");
+    }
+}
+
 </script>
 
 <script>
