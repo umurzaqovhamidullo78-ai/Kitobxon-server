@@ -1688,6 +1688,11 @@ textarea{
                 <button class="btn btn-primary" type="button" onclick="addNews()">
                     💾 Yangilikni saqlash
                 </button>
+
+                <div style="margin-top:20px;">
+                    <h4>📋 Saqlangan yangiliklar</h4>
+                    <div id="adminNewsList"></div>
+                </div>
             </div>
         </div>
 
@@ -2036,6 +2041,7 @@ if(id === "home"){
     }
 
     if(id === "admin"){
+        loadAdminNews();
         document.getElementById("adminBooks").textContent = books.length;
         loadPendingOperators();
         loadAdminLibraries();
@@ -3736,6 +3742,58 @@ async function loadNews(){
     }
 }
 
+async function deleteNews(id){
+    if(!confirm("Bu yangilikni o‘chirishni xohlaysizmi?")) return;
+
+    try{
+        const response=await fetch(API_URL+"/api/news/"+id,{
+            method:"DELETE"
+        });
+
+        const result=await response.json();
+
+        if(!response.ok || !result.success){
+            throw new Error(result.message || "O‘chirish amalga oshmadi.");
+        }
+
+        alert("✅ Yangilik o‘chirildi.");
+        loadAdminNews();
+        loadNews();
+    }catch(error){
+        console.error("Yangilik o‘chirish xatosi:",error);
+        alert("❌ Yangilikni o‘chirib bo‘lmadi.");
+    }
+}
+
+async function loadAdminNews(){
+    const container=document.getElementById("adminNewsList");
+    if(!container) return;
+
+    try{
+        const response=await fetch(API_URL+"/api/news");
+        const result=await response.json();
+
+        if(!result.success || !Array.isArray(result.data)){
+            container.innerHTML="<p>Yangiliklar topilmadi.</p>";
+            return;
+        }
+
+        container.innerHTML=result.data.map(item=>`
+            <div class="info-card" style="margin-top:12px;">
+                ${item.image ? `<img src="${item.image}" style="width:100%;max-height:180px;object-fit:cover;border-radius:12px;margin-bottom:10px;">` : ""}
+                <h4>${item.title || ""}</h4>
+                <p>${item.text || ""}</p>
+                <button class="btn btn-danger" type="button" onclick="deleteNews(${item.id})">
+                    🗑️ O‘chirish
+                </button>
+            </div>
+        `).join("");
+    }catch(error){
+        console.error("Admin yangiliklarini yuklash xatosi:",error);
+        container.innerHTML="<p>Yangiliklarni yuklab bo‘lmadi.</p>";
+    }
+}
+
 async function addNews(){
     const title=document.getElementById("newsTitle")?.value.trim();
     const text=document.getElementById("newsText")?.value.trim();
@@ -3771,6 +3829,8 @@ async function addNews(){
         document.getElementById("newsImageFile").value="";
 
         alert("✅ Yangilik muvaffaqiyatli saqlandi.");
+        loadAdminNews();
+        loadNews();
     }catch(error){
         console.error("Yangilik saqlash xatosi:",error);
         alert("❌ Yangilikni saqlab bo‘lmadi.");

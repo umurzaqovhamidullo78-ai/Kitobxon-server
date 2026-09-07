@@ -841,6 +841,32 @@ app.post("/api/news", upload.single("image"), (req, res) => {
     });
 });
 
+app.delete("/api/news/:id", (req, res) => {
+    const id = Number(req.params.id);
+    const news = db.prepare("SELECT image FROM news WHERE id = ?").get(id);
+
+    if (!news) {
+        return res.status(404).json({
+            success: false,
+            message: "Yangilik topilmadi"
+        });
+    }
+
+    if (news.image && news.image.startsWith("/uploads/news/")) {
+        const filePath = path.join(__dirname, news.image.replace(/^\//, ""));
+        if (fs.existsSync(filePath)) {
+            fs.unlinkSync(filePath);
+        }
+    }
+
+    db.prepare("DELETE FROM news WHERE id = ?").run(id);
+
+    res.json({
+        success: true,
+        message: "Yangilik o‘chirildi"
+    });
+});
+
 // ===============================
 // BOOK COVER
 app.get("/api/books/:id/cover", (req, res) => {
