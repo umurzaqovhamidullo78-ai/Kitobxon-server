@@ -38,7 +38,7 @@ button{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    gap:22px;
+    gap:15px;
 }
 
 .languages{
@@ -56,17 +56,6 @@ button{
     font-weight:600;
     cursor:pointer;
     box-shadow:0 2px 8px rgba(0,0,0,.12);
-}
-
-.member-counter{
-    background:white;
-    color:#087f5b;
-    border-radius:20px;
-    padding:7px 12px;
-    font-size:13px;
-    font-weight:600;
-    box-shadow:0 2px 8px rgba(0,0,0,.12);
-    white-space:nowrap;
 }
 
 .language-menu{
@@ -802,452 +791,7 @@ html,body{
     }
 }
 
-
-/* =========================================================
-   KITOBXON — PHONE FIRST DESIGN
-   Canonical mobile interface
-   ========================================================= */
-
-*{
-    box-sizing:border-box;
-}
-
-html{
-    width:100%;
-    overflow-x:hidden;
-}
-
-body{
-    width:100%;
-    min-width:0;
-    overflow-x:hidden;
-    -webkit-text-size-adjust:100%;
-}
-
-img{
-    max-width:100%;
-}
-
-button,
-input,
-select,
-textarea{
-    max-width:100%;
-}
-
-/* ---------- PHONE HEADER ---------- */
-
-@media(max-width:700px){
-
-    .header{
-        padding:10px 12px 14px;
-    }
-
-    .top{
-        width:100%;
-        max-width:none;
-        flex-direction:row;
-        justify-content:space-between;
-        align-items:center;
-        gap:8px;
-    }
-
-    .brand{
-        width:100%;
-        max-width:none;
-        margin:12px 0 8px;
-    }
-
-    .brand h1{
-        font-size:25px;
-        line-height:1.15;
-    }
-
-    .brand p{
-        font-size:12px;
-        margin-top:4px;
-    }
-
-    .languages{
-        flex-shrink:0;
-    }
-
-    .language-toggle{
-        padding:7px 10px;
-        font-size:12px;
-    }
-
-    /* ---------- DESKTOP NAV HIDDEN ---------- */
-
-    .nav{
-        display:none;
-    }
-
-    /* ---------- MAIN CONTENT ---------- */
-
-    .container{
-        width:100%;
-        max-width:none;
-        margin:0;
-        padding:12px 10px 88px;
-    }
-
-    /* ---------- HERO ---------- */
-
-    .hero{
-        margin-bottom:16px;
-        padding:20px 16px;
-        border-radius:18px;
-    }
-
-    .hero h2{
-        font-size:22px;
-        line-height:1.25;
-        margin-bottom:8px;
-    }
-
-    .hero p{
-        font-size:13px;
-        line-height:1.55;
-    }
-
-    /* ---------- SECTION TITLES ---------- */
-
-    .section-title{
-        margin:20px 2px 12px;
-        gap:8px;
-    }
-
-    .section-title h2,
-    .section-title h3{
-        font-size:18px;
-    }
-
-    /* ---------- BOOK GRID ---------- */
-
-    .book-grid{
-        width:100%;
-        display:grid;
-        grid-template-columns:repeat(2,minmax(0,1fr));
-        gap:10px;
-    }
-
-    .book-card{
-        width:100%;
-        min-width:0;
-        border-radius:14px;
-        overflow:hidden;
-    }
-
-    .book-card:hover{
-        transform:none;
-    }
-
-    .cover{
-        width:100%;
-        height:155px;
-        padding:10px;
-        font-size:14px;
-        line-height:1.25;
-    }
-
-    .book-info{
-        padding:9px;
-    }
-
-    .book-info h3{
-        font-size:15px;
-        line-height:1.3;
-        margin-bottom:5px;
-    }
-
-    .book-info p{
-        font-size:13px;
-        line-height:1.35;
-        margin:3px 0;
-    }
-
-    .btn{
-        width:100%;
-        padding:9px 7px;
-        margin-top:6px;
-        border-radius:9px;
-        font-size:11px;
-    }
-
-    /* ---------- SEARCH ---------- */
-
-    .search-box{
-        padding:12px;
-        margin-bottom:15px;
-        border-radius:14px;
-    }
-
-    .search-row{
-        display:grid;
-        grid-template-columns:1fr;
-        gap:8px;
-    }
-
-    .search-box input{
-        min-height:44px;
-        font-size:14px;
-    }
-
-    /* ---------- LIBRARIES ---------- */
-
-    .library-browser{
-        gap:10px;
-        margin-top:10px;
-    }
-
-    .library-search{
-        padding:10px 12px;
-        border-radius:13px;
-    }
-
-    .library-search input{
-        font-size:14px;
-    }
-
-    .library-filters{
-        grid-template-columns:1fr 1fr;
-        gap:7px;
-    }
-
-    .library-filter{
-        padding:10px 6px;
-        border-radius:11px;
-        font-size:12px;
-    }
-
-    .library-region{
-        border-radius:14px;
-    }
-
-    .library-region-header{
-        padding:13px;
-        font-size:15px;
-    }
-
-    .library-district{
-        margin:8px;
-        border-radius:11px;
-    }
-
-    .library-district-header{
-        padding:11px;
-        font-size:13px;
-    }
-
-    .library-item{
-        padding:11px;
-        border-radius:10px;
-    }
-
-    .library-item h3{
-        font-size:14px;
-    }
-
-    .library-item p{
-        font-size:12px;
-    }
-
-    /* ---------- GENERAL CARDS ---------- */
-
-    .cards{
-        grid-template-columns:1fr;
-        gap:10px;
-    }
-
-    .info-card{
-        padding:15px;
-        border-radius:14px;
-    }
-
-    /* ---------- PROFILE ---------- */
-
-    .profile{
-        grid-template-columns:1fr;
-        gap:12px;
-    }
-
-    .profile-card{
-        padding:18px 14px;
-        border-radius:15px;
-    }
-
-    .avatar{
-        width:72px;
-        height:72px;
-        font-size:32px;
-        margin-bottom:10px;
-    }
-
-    .stat-grid{
-        grid-template-columns:repeat(3,minmax(0,1fr));
-        gap:7px;
-    }
-
-    .stat{
-        padding:12px 6px;
-        border-radius:11px;
-        text-align:center;
-    }
-
-    .stat strong{
-        font-size:21px;
-    }
-
-    .stat span{
-        font-size:12px;
-    }
-
-    /* ---------- READER ---------- */
-
-    .reader{
-        width:100%;
-        max-width:none;
-        padding:12px;
-        border-radius:14px;
-    }
-
-    .reader-top{
-        gap:8px;
-        margin-bottom:12px;
-        flex-wrap:wrap;
-    }
-
-    .reader-text{
-        min-height:420px;
-        padding:15px;
-        font-size:16px;
-        line-height:1.8;
-        border-radius:10px;
-    }
-
-    .reader-controls{
-        gap:6px;
-    }
-
-    /* ---------- RESERVATION ---------- */
-
-    .reservation{
-        flex-direction:column;
-        align-items:stretch;
-        padding:13px;
-        gap:8px;
-        border-radius:13px;
-    }
-
-    /* ---------- FORMS ---------- */
-
-    .form{
-        padding:15px;
-        border-radius:14px;
-    }
-
-    .form-group{
-        margin-bottom:12px;
-    }
-
-    .form input,
-    .form select,
-    .form textarea{
-        padding:11px;
-        font-size:14px;
-    }
-
-    /* ---------- MOBILE BOTTOM NAV ---------- */
-
-    .mobile-menu{
-        display:flex;
-        width:100%;
-        height:68px;
-        justify-content:space-around;
-        align-items:stretch;
-        background:#ffffff;
-        position:fixed;
-        left:0;
-        right:0;
-        bottom:0;
-        z-index:9999;
-        box-shadow:0 -4px 18px rgba(0,0,0,.12);
-        padding:5px 4px calc(5px + env(safe-area-inset-bottom));
-    }
-
-    .mobile-menu button{
-        flex:1;
-        min-width:0;
-        border:0;
-        background:#fff;
-        color:#315747;
-        padding:5px 2px;
-        font-size:10px;
-        line-height:1.2;
-        display:flex;
-        flex-direction:column;
-        justify-content:center;
-        align-items:center;
-        gap:2px;
-    }
-
-    .mobile-menu button:active{
-        background:#e5f5ef;
-        border-radius:10px;
-    }
-
-    /* ---------- FOOTER ---------- */
-
-    .footer{
-        margin-top:25px;
-        padding:18px 10px 85px;
-        font-size:12px;
-    }
-}
-
-/* ---------- VERY SMALL PHONES ---------- */
-
-@media(max-width:380px){
-
-    .container{
-        padding-left:8px;
-        padding-right:8px;
-    }
-
-    .book-grid{
-        gap:8px;
-    }
-
-    .cover{
-        height:140px;
-        font-size:13px;
-    }
-
-    .book-info{
-        padding:8px;
-    }
-
-    .book-info h3{
-        font-size:14px;
-    }
-
-    .book-info p{
-        font-size:12px;
-    }
-
-    .btn{
-        font-size:12px;
-        padding:8px 5px;
-    }
-
-    .stat strong{
-        font-size:18px;
-    }
-}
-
 </style>
-<style>* { font-size: 14px !important; }</style>
 </head>
 
 <body>
@@ -1270,11 +814,6 @@ textarea{
                 <button onclick="selectLanguage('en')">🇬🇧 English</button>
             </div>
         </div>
-
-        <div class="member-counter" id="memberCounter">
-            🆔 Аъзо №: <span id="memberCount">0</span>
-        </div>
-
         <div style="margin-top:10px;"><button class="btn btn-primary" onclick="showPage('profile',this)">👤 Profilim</button></div>
     </div>
 
@@ -1303,7 +842,7 @@ textarea{
 
         <button onclick="showPage('reader',this)">📖 Elektron kitob</button>
 
-        <button onclick="showAdminLogin(this)">👑 Admin</button>
+        <button onclick="showPage('admin',this)">👑 Admin</button>
 
     </div>
 </nav>
@@ -1336,8 +875,6 @@ textarea{
     <div class="section-title">
         <h2>📰 Yangiliklar</h2>
     </div>
-
-    <div id="homeNews" class="cards"></div>
 
 </section>
 
@@ -1556,80 +1093,6 @@ textarea{
 </section>
 
 
-<!-- NEWS -->
-<section id="news" class="page">
-    <div class="section-title">
-        <button class="btn btn-light" onclick="showPage('home')" style="float:right;margin-bottom:10px;">
-            ← Orqaga
-        </button>
-        <h2>📰 Yangiliklar</h2>
-    </div>
-
-    <div id="newsList" class="cards"></div>
-</section>
-
-
-<!-- ADMIN LOGIN -->
-<section id="adminLogin" class="page">
-
-    <div class="section-title">
-        <button class="btn btn-light"
-                onclick="showPage('home')"
-                style="float:right;margin-bottom:10px;">
-            ← Orqaga
-        </button>
-        <h2>👑 Admin kirish</h2>
-    </div>
-
-    <div class="profile-card">
-        <div class="avatar">👑</div>
-        <h2>Administrator</h2>
-        <p>Administrator paneliga kirish uchun ma'lumotlaringizni kiriting.</p>
-    </div>
-
-    <div class="info-card">
-
-        <h3>🔐 Administrator sifatida kirish</h3>
-
-        <div class="form">
-
-            <div class="form-group">
-                <label>📞 Telefon</label>
-                <input id="adminLoginPhone"
-                       type="tel"
-                       placeholder="Administrator telefon raqami"
-                       autocomplete="username">
-            </div>
-
-            <div class="form-group">
-                <label>🔐 Parol</label>
-                <input id="adminLoginPassword"
-                       type="password"
-                       placeholder="Administrator paroli"
-                       autocomplete="current-password">
-            </div>
-
-            <button class="btn btn-primary btn-full"
-                    type="button"
-                    onclick="loginAdmin()">
-                👑 Admin sifatida kirish
-            </button>
-
-        </div>
-
-    </div>
-
-    <div class="notice" style="margin-top:15px;">
-        <strong>ℹ️ Eslatma</strong>
-        <p style="margin-top:6px;">
-            Bu kirish faqat administratorlar uchun.
-            Oddiy kitobxonlar Profilim bo‘limidagi
-            odatiy login orqali kiradi.
-        </p>
-    </div>
-
-</section>
-
 <!-- ADMIN -->
 
 <section id="admin" class="page">
@@ -1833,63 +1296,7 @@ textarea{
 
         <div class="info-card">
             <h3>👨‍💼 Operatorlar</h3>
-            <p>Operatorlarni ko‘rish, yaratish, tasdiqlash va kutubxonaga biriktirish.</p>
-
-            <div style="margin:16px 0;">
-                <button class="btn btn-primary btn-full"
-                        type="button"
-                        onclick="toggleOperatorAdminForm()">
-                    ➕ Operator qo‘shish
-                </button>
-            </div>
-
-            <div id="operatorAdminForm"
-                 style="display:none; margin-bottom:18px;">
-
-                <div class="form-group">
-                    <label>👤 Operator ismi</label>
-                    <input id="adminOperatorName"
-                           type="text"
-                           placeholder="Operator F.I.Sh.">
-                </div>
-
-                <div class="form-group">
-                    <label>📞 Telefon</label>
-                    <input id="adminOperatorPhone"
-                           type="text"
-                           placeholder="998...">
-                </div>
-
-                <div class="form-group">
-                    <label>🔑 Parol</label>
-                    <input id="adminOperatorPassword"
-                           type="password"
-                           placeholder="Operator paroli">
-                </div>
-
-                <div class="form-group">
-                    <label>🏛️ Kutubxona ID</label>
-                    <input id="adminOperatorLibraryId"
-                           type="number"
-                           min="1"
-                           placeholder="Masalan: 1">
-                </div>
-
-                <button class="btn btn-primary btn-full"
-                        type="button"
-                        onclick="createOperatorFromAdmin()">
-                    💾 Operatorni yaratish
-                </button>
-
-                <button class="btn btn-light btn-full"
-                        type="button"
-                        onclick="toggleOperatorAdminForm()"
-                        style="margin-top:8px;">
-                    Bekor qilish
-                </button>
-
-            </div>
-
+            <p>Operatorlarni ko‘rish, tasdiqlash va kutubxonaga biriktirish.</p>
             <div id="operatorsContainer">
                 <div class="notice">Operatorlar yuklanmoqda...</div>
             </div>
@@ -1910,110 +1317,6 @@ textarea{
 
 
 
-
-</section>
-
-
-
-<!-- OPERATOR -->
-
-<section id="operator" class="page">
-
-    <div class="section-title">
-        <button class="btn btn-light" onclick="showPage('home')">
-            ← Orqaga
-        </button>
-        <h2>👨‍💼 Operator paneli</h2>
-    </div>
-
-    <div class="notice">
-        👨‍💼 Bu bo‘lim faqat operatorlar uchun.
-    </div>
-
-    <div class="stat-grid">
-        <div class="stat">
-            <strong id="operatorBooks">0</strong>
-            📚 Kitoblar
-        </div>
-
-        <div class="stat">
-            <strong id="operatorReservations">0</strong>
-            📋 Bronlar
-        </div>
-
-        <div class="stat">
-            <strong id="operatorLibrary">—</strong>
-            🏛️ Kutubxona
-        </div>
-    </div>
-
-    <br>
-
-    <div class="cards">
-
-        <div class="info-card">
-            <h3>📚 Kitoblarni boshqarish</h3>
-            <p>O‘zingizga biriktirilgan kutubxona kitoblarini boshqarish.</p>
-            <button class="btn btn-primary btn-full"
-                    type="button"
-                    onclick="showPage('admin')">
-                📚 Kitoblar
-            </button>
-        </div>
-
-        <div class="info-card">
-            <h3>➕ Kitob qo‘shish</h3>
-            <p>Yangi kitobni elektron katalogga qo‘shish.</p>
-            <button class="btn btn-primary btn-full"
-                    type="button"
-                    onclick="showPage('admin')">
-                ➕ Kitob qo‘shish
-            </button>
-        </div>
-
-        <div class="info-card">
-            <h3>📋 Bronlar</h3>
-            <p>Kitobxonlar bronlarini ko‘rish va boshqarish.</p>
-            <button class="btn btn-primary btn-full"
-                    type="button"
-                    onclick="showPage('reservations')">
-                📋 Bronlarni ochish
-            </button>
-        </div>
-
-    </div>
-
-
-        <div class="info-card">
-            <h3>📰 Yangiliklarni boshqarish</h3>
-            <p>Yangi xabar va e’lonlarni qo‘shish.</p>
-
-            <div class="form">
-                <div class="form-group">
-                    <label>📝 Yangilik nomi</label>
-                    <input id="newsTitle" type="text" placeholder="Masalan: Yangi kitoblar keldi">
-                </div>
-
-                <div class="form-group">
-                    <label>📄 Yangilik matni</label>
-                    <textarea id="newsText" rows="5" placeholder="Yangilik mazmunini yozing..."></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label>🖼️ Yangilik rasmi (ixtiyoriy)</label>
-                    <input id="newsImageFile" type="file" accept="image/*">
-                </div>
-
-                <button class="btn btn-primary" type="button" onclick="addNews()">
-                    💾 Yangilikni saqlash
-                </button>
-
-                <div style="margin-top:20px;">
-                    <h4>📋 Saqlangan yangiliklar</h4>
-                    <div id="operatorNewsList"></div>
-                </div>
-            </div>
-        </div>
 
 </section>
 
@@ -2159,30 +1462,6 @@ let readBooks =
 ========================= */
 
 const API_URL = window.location.origin;
-async function loadMemberCount(){
-    try{
-        const response = await fetch(API_URL + "/api/member-count");
-
-        if(!response.ok){
-            throw new Error("A'zolar sonini yuklashda xato");
-        }
-
-        const result = await response.json();
-
-        if(result.success){
-            const el = document.getElementById("memberCount");
-            if(el){
-                el.textContent = Number(result.count) || 0;
-            }
-        }
-    }catch(error){
-        console.error("KITOBXON: a'zolar sonini yuklashda xato:", error);
-    }
-}
-
-loadMemberCount();
-
-
 
 async function loadBooksFromServer(){
 
@@ -2232,165 +1511,7 @@ async function loadBooksFromServer(){
    SAHIFA
 ========================= */
 
-
-function showAdminLogin(button){
-
-    document.querySelectorAll(".page")
-        .forEach(p => p.classList.remove("active"));
-
-    const page = document.getElementById("adminLogin");
-
-    if(page){
-        page.classList.add("active");
-    }
-
-    document.querySelectorAll(".nav button")
-        .forEach(b => b.classList.remove("active"));
-
-    if(button){
-        button.classList.add("active");
-    }
-
-    const phone = document.getElementById("adminLoginPhone");
-
-    if(phone){
-        setTimeout(() => phone.focus(), 100);
-    }
-}
-
-
-async function loginAdmin(){
-
-    const phoneElement =
-        document.getElementById("adminLoginPhone");
-
-    const passwordElement =
-        document.getElementById("adminLoginPassword");
-
-    const phone =
-        phoneElement ? phoneElement.value.trim() : "";
-
-    const password =
-        passwordElement ? passwordElement.value : "";
-
-    if(!phone || !password){
-        alert("Telefon va parolni kiriting.");
-        return;
-    }
-
-    const adminRoles = [
-        "district_admin",
-        "region_admin",
-        "republic_admin"
-    ];
-
-    try{
-
-        const response = await fetch(
-            API_URL + "/api/login",
-            {
-                method:"POST",
-                headers:{
-                    "Content-Type":"application/json"
-                },
-                body:JSON.stringify({
-                    phone: phone,
-                    password: password
-                })
-            }
-        );
-
-        const result = await response.json();
-
-        if(!response.ok || !result.success){
-            throw new Error(
-                result.message || "Admin login amalga oshmadi."
-            );
-        }
-
-        if(!result.user || !adminRoles.includes(result.user.role)){
-
-            alert(
-                "⛔ Bu hisob administrator hisoblanmaydi.\n\n" +
-                "Oddiy kitobxon hisoblari Admin paneliga kira olmaydi."
-            );
-
-            return;
-        }
-
-        localStorage.setItem(
-            "kitobxon_token",
-            result.token
-        );
-
-        localStorage.setItem(
-            "kitobxon_user",
-            JSON.stringify(result.user)
-        );
-
-        if(phoneElement){
-            phoneElement.value = "";
-        }
-
-        if(passwordElement){
-            passwordElement.value = "";
-        }
-
-        alert(
-            "✅ Administrator sifatida muvaffaqiyatli kirdingiz."
-        );
-
-        showPage("admin");
-
-    }catch(error){
-
-        console.error(
-            "Admin login xatosi:",
-            error
-        );
-
-        alert(
-            "❌ " +
-            (error.message || "Admin login amalga oshmadi.")
-        );
-    }
-}
-
-
 function showPage(id, button){
-
-    const savedUser = localStorage.getItem("kitobxon_user");
-    let currentUser = null;
-
-    try {
-        currentUser = savedUser ? JSON.parse(savedUser) : null;
-    } catch(e) {
-        currentUser = null;
-    }
-
-    const adminRoles = [
-        "district_admin",
-        "region_admin",
-        "republic_admin"
-    ];
-
-    const userRole = currentUser ? currentUser.role : null;
-
-
-    if(id === "admin"){
-
-        if(!adminRoles.includes(userRole)){
-
-            showAdminLogin(button);
-
-            return;
-        }
-    }
-
-    if(id === "operator" && userRole !== "operator"){
-        alert("Bu bo‘lim faqat operatorlar uchun.");
-        return;
-    }
 
     document.querySelectorAll(".page")
         .forEach(p => p.classList.remove("active"));
@@ -2412,10 +1533,6 @@ function showPage(id, button){
         renderBooks("booksList", books);
     }
 
-    if(id === "news"){
-        loadNews();
-    }
-
     if(id === "libraries"){
         setTimeout(() => {
             loadLibraries();
@@ -2431,30 +1548,9 @@ if(id === "home"){
     }
 
     if(id === "admin"){
-        loadOperatorNews();
-
-        const adminBooks = document.getElementById("adminBooks");
-        if(adminBooks){
-            adminBooks.textContent = books.length;
-        }
-
+        document.getElementById("adminBooks").textContent = books.length;
         loadPendingOperators();
         loadAdminLibraries();
-    }
-
-    if(id === "operator"){
-        const operatorBooks = document.getElementById("operatorBooks");
-        if(operatorBooks){
-            operatorBooks.textContent = books.length;
-        }
-
-        const operatorLibrary = document.getElementById("operatorLibrary");
-        if(operatorLibrary){
-            operatorLibrary.textContent =
-                currentUser && currentUser.library_id
-                    ? "ID " + currentUser.library_id
-                    : "Biriktirilmagan";
-        }
     }
 
     window.scrollTo({
@@ -2469,7 +1565,7 @@ if(id === "home"){
 ========================= */
 
 
-async function approveOperator(userId, libraryId){
+async function approveOperator(userId){
 
     const token = localStorage.getItem("kitobxon_token");
 
@@ -2478,18 +1574,16 @@ async function approveOperator(userId, libraryId){
         return;
     }
 
-    const operatorId = Number(userId);
-    const targetLibraryId = Number(libraryId);
+    const libraryId = prompt("Operatorni qaysi kutubxonaga biriktiramiz? Kutubxona ID sini kiriting:");
 
-    if(!operatorId || !targetLibraryId){
-        alert("Operator ID yoki kutubxona ID topilmadi.");
+    if(!libraryId){
         return;
     }
 
     try{
 
         const response = await fetch(
-            API_URL + "/api/admin/users/" + operatorId + "/approve",
+            API_URL + "/api/admin/users/" + Number(userId) + "/approve",
             {
                 method:"POST",
                 headers:{
@@ -2497,7 +1591,7 @@ async function approveOperator(userId, libraryId){
                     "Authorization":"Bearer " + token
                 },
                 body:JSON.stringify({
-                    library_id:targetLibraryId
+                    library_id:Number(libraryId)
                 })
             }
         );
@@ -2536,13 +1630,8 @@ async function loadPendingOperators(){
     const token = localStorage.getItem("kitobxon_token");
 
     if(!token){
-        container.innerHTML = `
-            <div class="notice">
-                <p style="margin-bottom:8px;">Administrator sifatida tizimga kiring.</p>
-                <button class="btn btn-primary" type="button" onclick="showAdminLogin()">
-                    👑 Administrator sifatida kirish
-                </button>
-            </div>`;
+        container.innerHTML =
+            '<div class="notice">Avval administrator sifatida tizimga kiring.</div>';
         return;
     }
 
@@ -2552,7 +1641,7 @@ async function loadPendingOperators(){
     try{
 
         const response = await fetch(
-            API_URL + "/api/admin/operators",
+            API_URL + "/api/admin/pending-users",
             {
                 headers:{
                     Authorization:"Bearer " + token
@@ -2585,87 +1674,12 @@ async function loadPendingOperators(){
             card.className = "info-card";
 
             card.innerHTML = `
-                <strong style="font-size:18px;">
-                    👨‍💼 ${escapeHTML(user.name || "")}
-                </strong>
-
-                <p>🆔 Foydalanuvchi ID: <strong>${Number(user.id)}</strong></p>
-
-                <p>📞 Telefon: ${escapeHTML(user.phone || "")}</p>
-
-                <div style="
-                    margin:14px 0;
-                    padding:12px;
-                    background:#f0fdf4;
-                    border-radius:12px;
-                    border:1px solid #d1fae5;
-                ">
-                    <strong>🏛️ Boshqarayotgan kutubxonasi</strong>
-
-                    <p style="margin:8px 0 4px;">
-                        ${escapeHTML(user.library_name || "Kutubxona biriktirilmagan")}
-                    </p>
-
-                    <p style="margin:0;">
-                        🆔 Kutubxona ID:
-                        <strong>${user.library_id || "biriktirilmagan"}</strong>
-                    </p>
-                </div>
-
-                <div style="
-                    display:grid;
-                    grid-template-columns:repeat(3,minmax(0,1fr));
-                    gap:8px;
-                    margin-top:12px;
-                ">
-                    <div style="
-                        padding:10px 6px;
-                        text-align:center;
-                        background:#f8fafc;
-                        border-radius:10px;
-                    ">
-                        <div style="font-size:20px;">📚</div>
-                        <strong>${Number(user.books_count) || 0}</strong>
-                        <small style="display:block;">Kitoblar</small>
-                    </div>
-
-                    <div style="
-                        padding:10px 6px;
-                        text-align:center;
-                        background:#f8fafc;
-                        border-radius:10px;
-                    ">
-                        <div style="font-size:20px;">📌</div>
-                        <strong>${Number(user.reservations_count) || 0}</strong>
-                        <small style="display:block;">Bronlar</small>
-                    </div>
-
-                    <div style="
-                        padding:10px 6px;
-                        text-align:center;
-                        background:#f8fafc;
-                        border-radius:10px;
-                    ">
-                        <div style="font-size:20px;">📰</div>
-                        <strong>${Number(user.news_count) || 0}</strong>
-                        <small style="display:block;">Yangiliklar</small>
-                    </div>
-                </div>
-
-                <p style="margin-top:12px;">
-                    ${Number(user.approved)
-                        ? "🟢 Holati: <strong>Tasdiqlangan</strong>"
-                        : "🟡 Holati: <strong>Tasdiqlanmagan</strong>"}
-                </p>
-
-                ${Number(user.approved) ? "" : `
-                    <button
-                        class="btn btn-primary btn-full"
-                        type="button"
-                        onclick="approveOperator(${Number(user.id)}, ${Number(user.library_id)})">
-                        ✅ Tasdiqlash
-                    </button>
-                `}
+                <strong>👨‍💼 ${escapeHTML(user.name || "")}</strong>
+                <p>📞 ${escapeHTML(user.phone || "")}</p>
+                <p>🏛️ Kutubxona ID: ${user.library_id || "biriktirilmagan"}</p>
+                <button onclick="approveOperator(${Number(user.id)})">
+                    ✅ Tasdiqlash
+                </button>
             `;
 
             container.appendChild(card);
@@ -2680,101 +1694,8 @@ async function loadPendingOperators(){
         );
 
         container.innerHTML =
-            '<div class="notice">❌ Operatorlarni yuklab bo‘lmadi.<br><small>' +
-            escapeHTML(error.message || "Noma’lum xato") +
-            '</small></div>';
+            '<div class="notice">Operatorlarni yuklab bo‘lmadi.</div>';
     }
-}
-
-
-async function createOperatorFromAdmin(){
-
-    const name = document.getElementById("adminOperatorName").value.trim();
-    const phone = document.getElementById("adminOperatorPhone").value.trim();
-    const password = document.getElementById("adminOperatorPassword").value;
-    const libraryId = Number(
-        document.getElementById("adminOperatorLibraryId").value
-    );
-
-    if(!name || !phone || !password || !libraryId){
-        alert("Operator ismi, telefon, parol va kutubxona ID sini kiriting.");
-        return;
-    }
-
-    const token = localStorage.getItem("kitobxon_token");
-
-    if(!token){
-        alert("Avval administrator sifatida tizimga kiring.");
-        return;
-    }
-
-    try{
-
-        const response = await fetch(
-            API_URL + "/api/admin/operators",
-            {
-                method:"POST",
-                headers:{
-                    "Content-Type":"application/json",
-                    "Authorization":"Bearer " + token
-                },
-                body:JSON.stringify({
-                    name:name,
-                    phone:phone,
-                    password:password,
-                    library_id:libraryId
-                })
-            }
-        );
-
-        const result = await response.json();
-
-        if(!response.ok || !result.success){
-            throw new Error(
-                result.message || "Operator yaratilmadi"
-            );
-        }
-
-        alert(
-            "✅ Operator muvaffaqiyatli yaratildi.\n\n" +
-            "Endi administrator uni tasdiqlashi kerak."
-        );
-
-        document.getElementById("adminOperatorName").value = "";
-        document.getElementById("adminOperatorPhone").value = "";
-        document.getElementById("adminOperatorPassword").value = "";
-        document.getElementById("adminOperatorLibraryId").value = "";
-
-        const form = document.getElementById("operatorAdminForm");
-        if(form){
-            form.style.display = "none";
-        }
-
-        loadPendingOperators();
-
-    }catch(error){
-
-        console.error(
-            "Operator yaratishda xato:",
-            error
-        );
-
-        alert(
-            error.message || "Operator yaratilmadi."
-        );
-    }
-}
-
-function toggleOperatorAdminForm(){
-
-    const form = document.getElementById("operatorAdminForm");
-
-    if(!form) return;
-
-    form.style.display =
-        form.style.display === "none" || !form.style.display
-            ? "block"
-            : "none";
 }
 
 
@@ -2795,225 +1716,49 @@ async function registerUser(){
 }
 
 async function loginUser(){
-    const phone = document.getElementById("loginPhone").value.trim();
-    const password = document.getElementById("loginPassword").value;
-
-    if(!phone || !password){
-        alert("Telefon va parolni kiriting.");
-        return;
-    }
-
+    const phone=document.getElementById("loginPhone").value.trim();
+    const password=document.getElementById("loginPassword").value;
+    if(!phone||!password){alert("Telefon va parolni kiriting.");return;}
     try{
-        const response = await fetch(
-            API_URL + "/api/login",
-            {
-                method:"POST",
-                headers:{"Content-Type":"application/json"},
-                body:JSON.stringify({phone,password})
-            }
-        );
-
-        const result = await response.json();
-
-        if(!response.ok || !result.success){
-            throw new Error(result.message || "Kirishda xatolik");
-        }
-
-        localStorage.setItem("kitobxon_token", result.token);
-        localStorage.setItem(
-            "kitobxon_user",
-            JSON.stringify(result.user)
-        );
-
-        document.getElementById("loginPhone").value = "";
-        document.getElementById("loginPassword").value = "";
-
-        const role = result.user ? result.user.role : "reader";
-
-        if([
-            "district_admin",
-            "region_admin",
-            "republic_admin"
-        ].includes(role)){
-
-            // Admin hisobi oddiy Profilim loginidan Admin paneliga kirmaydi.
-            // Admin uchun alohida Admin login oynasi ishlatiladi.
-
-            localStorage.removeItem("kitobxon_token");
-            localStorage.removeItem("kitobxon_user");
-
-            alert(
-                "👑 Bu administrator hisobi.\n\n" +
-                "Admin paneliga kirish uchun " +
-                "👑 Admin bo‘limidan foydalaning."
-            );
-
-            showAdminLogin();
-
-            return;
-        }
-
-        if(role === "operator"){
-
-            alert(
-                "Xush kelibsiz, " +
-                result.user.name +
-                "!\nOperator sifatida kirdingiz."
-            );
-
-            showPage("operator");
-            return;
-        }
-
-        alert(
-            "Xush kelibsiz, " +
-            result.user.name +
-            "!"
-        );
-
-        showPage("profile");
-
-    }catch(error){
-        alert(error.message);
-    }
+        const response=await fetch(API_URL+"/api/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({phone,password})});
+        const result=await response.json();
+        if(!response.ok||!result.success)throw new Error(result.message||"Kirishda xatolik");
+        localStorage.setItem("kitobxon_token",result.token);
+        localStorage.setItem("kitobxon_user",JSON.stringify(result.user));
+        alert("Xush kelibsiz, "+result.user.name+"!");
+        document.getElementById("loginPhone").value="";
+        document.getElementById("loginPassword").value="";
+    }catch(error){alert(error.message);}
 }
 
 async function loadUsers(){
-
     const container = document.getElementById("usersContainer");
-
     if(!container) return;
-
     const token = localStorage.getItem("kitobxon_token");
-
     if(!token){
-        container.innerHTML =
-            '<div class="notice">Avval administrator sifatida tizimga kiring.</div>';
+        container.innerHTML = "<div class=\"notice\">Avval administrator sifatida tizimga kiring.</div>";
         return;
     }
-
-    container.innerHTML =
-        '<div class="notice">Foydalanuvchilar yuklanmoqda...</div>';
-
+    container.innerHTML = "<div class=\"notice\">Foydalanuvchilar yuklanmoqda...</div>";
     try{
-
-        const response = await fetch(
-            API_URL + "/api/admin/users",
-            {
-                headers:{
-                    Authorization:"Bearer " + token
-                }
-            }
-        );
-
+        const response = await fetch(API_URL + "/api/admin/users", {headers:{Authorization:"Bearer " + token}});
         const result = await response.json();
-
-        if(!response.ok || !result.success){
-            throw new Error(
-                result.message || "Foydalanuvchilarni yuklab bo‘lmadi"
-            );
-        }
-
-        const users = (result.data || [])
-            .filter(user => user.role === "reader");
-
+        if(!response.ok || !result.success) throw new Error(result.message || "Xatolik");
+        const users = result.data || [];
+        container.innerHTML = "";
         if(users.length === 0){
-            container.innerHTML =
-                '<div class="notice">Kitobxonlar hali ro‘yxatdan o‘tmagan.</div>';
+            container.innerHTML = "<div class=\"notice\">Foydalanuvchilar hali ro‘yxatdan o‘tmagan.</div>";
             return;
         }
-
-        container.innerHTML = "";
-
         users.forEach(user => {
-
             const card = document.createElement("div");
             card.className = "info-card";
-
-            card.innerHTML = `
-                <strong style="font-size:18px;">
-                    👤 ${escapeHTML(user.name || "")}
-                </strong>
-
-                <p>🆔 A'zo ID: <strong>${Number(user.id)}</strong></p>
-
-                <p>📞 Telefon:
-                    ${escapeHTML(user.phone || "")}
-                </p>
-
-                <div style="
-                    margin:12px 0;
-                    padding:12px;
-                    background:#f0fdf4;
-                    border-radius:12px;
-                    border:1px solid #d1fae5;
-                ">
-                    <strong>🏛️ A'zo bo‘lgan kutubxona</strong>
-
-                    <p style="margin:8px 0 0;">
-                        ${escapeHTML(
-                            user.library_name ||
-                            "Kutubxona biriktirilmagan"
-                        )}
-                    </p>
-                </div>
-
-                <div style="
-                    display:grid;
-                    grid-template-columns:repeat(2,minmax(0,1fr));
-                    gap:8px;
-                    margin-top:12px;
-                ">
-                    <div style="
-                        padding:10px 6px;
-                        text-align:center;
-                        background:#f8fafc;
-                        border-radius:10px;
-                    ">
-                        <div style="font-size:20px;">📌</div>
-                        <strong>${Number(user.reservations_count) || 0}</strong>
-                        <small style="display:block;">Bronlar</small>
-                    </div>
-
-                    <div style="
-                        padding:10px 6px;
-                        text-align:center;
-                        background:#f8fafc;
-                        border-radius:10px;
-                    ">
-                        <div style="font-size:20px;">
-                            ${Number(user.approved) ? "🟢" : "🟡"}
-                        </div>
-                        <strong>
-                            ${Number(user.approved)
-                                ? "Faol"
-                                : "Kutilmoqda"}
-                        </strong>
-                        <small style="display:block;">Holati</small>
-                    </div>
-                </div>
-
-                <p style="margin-top:12px;">
-                    📅 Ro‘yxatdan o‘tgan:
-                    ${escapeHTML(user.created_at || "")}
-                </p>
-            `;
-
+            card.innerHTML = "<strong>👤 " + escapeHTML(user.name || "") + "</strong>" + "<p>🆔 Azolar tartib raqami: " + Number(user.id) + "</p>" + "<p>📞 " + escapeHTML(user.phone || "") + "</p>" + "<p>👑 Rol: " + escapeHTML(user.role || "reader") + "</p>" + "<p>📅 Ro‘yxatdan o‘tgan: " + escapeHTML(user.created_at || "") + "</p>";
             container.appendChild(card);
-
         });
-
     }catch(error){
-
-        console.error(
-            "Foydalanuvchilarni yuklashda xato:",
-            error
-        );
-
-        container.innerHTML =
-            '<div class="notice">❌ Foydalanuvchilarni yuklab bo‘lmadi.<br><small>' +
-            escapeHTML(error.message || "Noma’lum xato") +
-            '</small></div>';
+        console.error("Foydalanuvchilarni yuklashda xato:", error);
+        container.innerHTML = "<div class=\"notice\">Foydalanuvchilarni yuklab bo‘lmadi.</div>";
     }
 }
 
@@ -3615,17 +2360,10 @@ async function editBook(id){
 
     try{
 
-        const token = localStorage.getItem("kitobxon_token");
-        if(!token){
-            alert("Avval tizimga kiring.");
-            return;
-        }
-
         const response = await fetch(API_URL + "/api/books/" + id, {
             method: "PUT",
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer " + token
+                "Content-Type": "application/json"
             },
             body: JSON.stringify({
                 title: title.trim(),
@@ -3671,17 +2409,8 @@ async function deleteBook(id){
 
     try{
 
-        const token = localStorage.getItem("kitobxon_token");
-        if(!token){
-            alert("Avval tizimga kiring.");
-            return;
-        }
-
         const response = await fetch(API_URL + "/api/books/" + id, {
-            method: "DELETE",
-            headers: {
-                "Authorization": "Bearer " + token
-            }
+            method: "DELETE"
         });
 
         const result = await response.json();
@@ -3848,17 +2577,10 @@ async function addBook(){
 
     try{
 
-        const token = localStorage.getItem("kitobxon_token");
-        if(!token){
-            alert("Avval tizimga kiring.");
-            return;
-        }
-
         const response = await fetch(API_URL + "/api/books", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer " + token
+                "Content-Type": "application/json"
             },
             body: JSON.stringify({
                 title: title,
@@ -3866,10 +2588,8 @@ async function addBook(){
                 genre: genre,
                 isbn: isbn,
                 year: Number(year) || null,
-                library_id: (
-                    JSON.parse(localStorage.getItem("kitobxon_user") || "null")?.library_id || null
-                ),
-                address: "",
+                library_id: 1,
+                address: "Toshbuloq",
                 inventory_number: "",
                 copies: copies,
                 cover: cover,
@@ -3969,11 +2689,6 @@ let pdfZoom = 1.0;
 let pdfRendering = false;
 let pdfPendingPage = null;
 
-let epubBook = null;
-let epubRendition = null;
-let epubProgress =
-    JSON.parse(localStorage.getItem("kitobxon_epub_progress")) || {};
-
 async function openReader(id){
 
     const book = books.find(x => x.id === id);
@@ -4000,92 +2715,6 @@ async function openReader(id){
 
     const readerText =
         document.getElementById("readerText");
-
-    if(book.ebook_type === "epub"){
-
-        if(!window.ePub){
-
-            readerText.textContent =
-                "EPUB o‘quvchi yuklanmoqda...";
-
-            return;
-
-        }
-
-        readerText.innerHTML = `
-            <div id="epubViewer"
-                 style="width:100%;height:70vh;background:#fffdf5;border-radius:12px;overflow:hidden;">
-            </div>
-        `;
-
-        try{
-
-            epubBook =
-                window.ePub(`${API_URL}/api/books/${id}/epub`);
-
-            epubRendition =
-                epubBook.renderTo("epubViewer", {
-                    width: "100%",
-                    height: "100%",
-                    spread: "none"
-                });
-
-            epubRendition.themes.default({
-                body: {
-                    "background": "#fffdf5 !important",
-                    "color": "#173b2b !important",
-                    "font-family": "Arial, sans-serif !important",
-                    "line-height": "1.7 !important"
-                }
-            });
-
-            const savedCfi =
-                epubProgress[id] || null;
-
-            if(savedCfi){
-                await epubRendition.display(savedCfi);
-            }else{
-                await epubRendition.display();
-            }
-
-            epubRendition.on("relocated", location => {
-
-                if(location &&
-                   location.start &&
-                   location.start.cfi){
-
-                    epubProgress[id] =
-                        location.start.cfi;
-
-                    localStorage.setItem(
-                        "kitobxon_epub_progress",
-                        JSON.stringify(epubProgress)
-                    );
-
-                }
-
-            });
-
-            document.getElementById("pageNumber").textContent =
-                "EPUB";
-
-        }catch(error){
-
-            console.error(
-                "KITOBXON: EPUB ochishda xato",
-                error
-            );
-
-            readerText.textContent =
-                "EPUB faylni ochishda xatolik yuz berdi.";
-
-        }
-
-        updateProfile();
-
-        return;
-
-    }
 
     if(book.ebook_type === "pdf"){
 
@@ -4267,15 +2896,6 @@ function nextPage(){
     const book =
         books.find(x => x.id === currentReaderBookId);
 
-    if(book && book.ebook_type === "epub"){
-
-        if(epubRendition){
-            epubRendition.next();
-        }
-
-        return;
-    }
-
     if(book && book.ebook_type === "pdf"){
 
         if(pdfDoc &&
@@ -4317,15 +2937,6 @@ function previousPage(){
     const book =
         books.find(x => x.id === currentReaderBookId);
 
-    if(book && book.ebook_type === "epub"){
-
-        if(epubRendition){
-            epubRendition.prev();
-        }
-
-        return;
-    }
-
     if(book && book.ebook_type === "pdf"){
 
         if(pdfDoc && pdfCurrentPage > 1){
@@ -4365,22 +2976,6 @@ function changeFont(value){
 
     const book =
         books.find(x => x.id === currentReaderBookId);
-
-    if(book && book.ebook_type === "epub"){
-
-        readerFontSize += value;
-
-        if(readerFontSize < 12) readerFontSize = 12;
-        if(readerFontSize > 30) readerFontSize = 30;
-
-        if(epubRendition){
-            epubRendition.themes.fontSize(
-                readerFontSize + "px"
-            );
-        }
-
-        return;
-    }
 
     if(book && book.ebook_type === "pdf"){
 
@@ -4424,22 +3019,6 @@ function toggleReaderTheme(){
 
     readerDark = !readerDark;
 
-    if(epubRendition){
-
-        epubRendition.themes.default({
-            body: {
-                "background": readerDark
-                    ? "#202b27 !important"
-                    : "#fffdf5 !important",
-                "color": readerDark
-                    ? "#ffffff !important"
-                    : "#173b2b !important"
-            }
-        });
-
-        return;
-    }
-
     const readerText =
         document.getElementById("readerText");
 
@@ -4463,18 +3042,17 @@ function toggleReaderTheme(){
 
 function updateProfile(){
 
-    const favCount = document.getElementById("favCount");
-    if(favCount) favCount.textContent = favorites.length;
+    document.getElementById("favCount")
+        .textContent = favorites.length;
 
-    const reservationCount =
-        document.getElementById("reservationCount");
-    if(reservationCount) reservationCount.textContent = 0;
+    document.getElementById("reservationCount")
+        .textContent = 0;
 
-    const readCount = document.getElementById("readCount");
-    if(readCount) readCount.textContent = readBooks.length;
+    document.getElementById("readCount")
+        .textContent = readBooks.length;
 
-    const adminBooks = document.getElementById("adminBooks");
-    if(adminBooks) adminBooks.textContent = books.length;
+    document.getElementById("adminBooks")
+        .textContent = books.length;
 }
 
 
@@ -4636,226 +3214,6 @@ init();
 
 
 loadBooksFromServer();
-
-
-async function loadNews(){
-    const container=document.getElementById("newsList") || document.getElementById("homeNews");
-    if(!container) return;
-
-    try{
-        const response=await fetch(API_URL+"/api/news");
-        const result=await response.json();
-
-        if(!result.success){
-            throw new Error("Yangiliklarni yuklab bo‘lmadi.");
-        }
-
-        const news=result.data || [];
-
-        if(news.length===0){
-            container.innerHTML='<div class="notice">Hozircha yangiliklar yo‘q.</div>';
-            return;
-        }
-
-        container.innerHTML=news.map(item=>`
-            <div class="info-card">
-                ${item.image ? `<img src="${item.image}" alt="" style="width:100%;max-height:220px;object-fit:cover;border-radius:12px;margin-bottom:12px;">` : ""}
-                <h3>📰 ${item.title}</h3>
-                <p>${item.text}</p>
-            </div>
-        `).join("");
-    }catch(error){
-        console.error("Yangiliklarni yuklash xatosi:",error);
-        container.innerHTML='<div class="notice">Yangiliklarni yuklab bo‘lmadi.</div>';
-    }
-}
-
-async function editNews(id){
-    try{
-        const response = await fetch(API_URL + "/api/news");
-        const result = await response.json();
-
-        if(!result.success || !Array.isArray(result.data)){
-            throw new Error("Yangilikni topib bo‘lmadi.");
-        }
-
-        const item = result.data.find(x => Number(x.id) === Number(id));
-
-        if(!item){
-            throw new Error("Yangilik topilmadi.");
-        }
-
-        const title = prompt("Yangilik nomi:", item.title || "");
-        if(title === null) return;
-
-        const text = prompt("Yangilik matni:", item.text || "");
-        if(text === null) return;
-
-        if(!title.trim() || !text.trim()){
-            alert("Yangilik nomi va matni bo‘sh bo‘lmasligi kerak.");
-            return;
-        }
-
-        const formData = new FormData();
-        formData.append("title", title.trim());
-        formData.append("text", text.trim());
-
-        const token = localStorage.getItem("kitobxon_token") || "";
-
-        const updateResponse = await fetch(
-            API_URL + "/api/news/" + id,
-            {
-                method: "PUT",
-                headers: {
-                    "Authorization": "Bearer " + token
-                },
-                body: formData
-            }
-        );
-
-        const updateResult = await updateResponse.json();
-
-        if(!updateResponse.ok || !updateResult.success){
-            throw new Error(
-                updateResult.message || "Yangilikni yangilab bo‘lmadi."
-            );
-        }
-
-        alert("✅ Yangilik yangilandi.");
-        loadOperatorNews();
-        loadNews();
-
-    }catch(error){
-        console.error("Yangilik tahrirlash xatosi:", error);
-        alert("❌ " + error.message);
-    }
-}
-
-async function deleteNews(id){
-    if(!confirm("Bu yangilikni o‘chirishni xohlaysizmi?")) return;
-
-    try{
-        const token=localStorage.getItem("kitobxon_token") || "";
-
-        const response=await fetch(API_URL+"/api/news/"+id,{
-            method:"DELETE",
-            headers:{
-                "Authorization":"Bearer "+token
-            }
-        });
-
-        const result=await response.json();
-
-        if(!response.ok || !result.success){
-            throw new Error(result.message || "O‘chirish amalga oshmadi.");
-        }
-
-        alert("✅ Yangilik o‘chirildi.");
-        loadOperatorNews();
-        loadNews();
-    }catch(error){
-        console.error("Yangilik o‘chirish xatosi:",error);
-        alert("❌ Yangilikni o‘chirib bo‘lmadi.");
-    }
-}
-
-async function loadOperatorNews(){
-    const container=document.getElementById("operatorNewsList");
-    if(!container) return;
-
-    try{
-        const response=await fetch(API_URL+"/api/news");
-        const result=await response.json();
-
-        if(!result.success || !Array.isArray(result.data)){
-            container.innerHTML="<p>Yangiliklar topilmadi.</p>";
-            return;
-        }
-
-        const currentUser = JSON.parse(
-            localStorage.getItem("kitobxon_user") || "null"
-        );
-
-        const myLibraryId = currentUser?.library_id;
-
-        const operatorNews = result.data.filter(item =>
-            Number(item.library_id) === Number(myLibraryId)
-        );
-
-        if(operatorNews.length === 0){
-            container.innerHTML="<p>Bu kutubxonada hozircha yangiliklar yo‘q.</p>";
-            return;
-        }
-
-        container.innerHTML=operatorNews.map(item=>`
-            <div class="info-card" style="margin-top:12px;">
-                ${item.image ? `<img src="${item.image}" style="width:100%;max-height:180px;object-fit:cover;border-radius:12px;margin-bottom:10px;">` : ""}
-                <h4>${item.title || ""}</h4>
-                <p>${item.text || ""}</p>
-                <div style="display:flex;gap:8px;flex-wrap:wrap;">
-                    <button class="btn btn-primary" type="button" onclick="editNews(${item.id})">
-                        ✏️ Tahrirlash
-                    </button>
-                    <button class="btn btn-danger" type="button" onclick="deleteNews(${item.id})">
-                        🗑️ O‘chirish
-                    </button>
-                </div>
-            </div>
-        `).join("");
-    }catch(error){
-        console.error("Operator yangiliklarini yuklash xatosi:",error);
-        container.innerHTML="<p>Yangiliklarni yuklab bo‘lmadi.</p>";
-    }
-}
-
-async function addNews(){
-    const title=document.getElementById("newsTitle")?.value.trim();
-    const text=document.getElementById("newsText")?.value.trim();
-    const imageFile=document.getElementById("newsImageFile")?.files[0];
-
-    if(!title || !text){
-        alert("Yangilik nomi va matnini kiriting.");
-        return;
-    }
-
-    try{
-        const formData=new FormData();
-        formData.append("title",title);
-        formData.append("text",text);
-
-        if(imageFile){
-            formData.append("image",imageFile);
-        }
-
-        const token=localStorage.getItem("kitobxon_token") || "";
-
-        const response=await fetch(API_URL+"/api/news",{
-            method:"POST",
-            headers:{
-                "Authorization":"Bearer "+token
-            },
-            body:formData
-        });
-
-        const result=await response.json();
-
-        if(!response.ok || !result.success){
-            throw new Error(result.message || "Yangilikni saqlab bo‘lmadi.");
-        }
-
-        document.getElementById("newsTitle").value="";
-        document.getElementById("newsText").value="";
-        document.getElementById("newsImageFile").value="";
-
-        alert("✅ Yangilik muvaffaqiyatli saqlandi.");
-        loadOperatorNews();
-        loadNews();
-    }catch(error){
-        console.error("Yangilik saqlash xatosi:",error);
-        alert("❌ Yangilikni saqlab bo‘lmadi.");
-    }
-}
-
 </script>
 
 <script>
@@ -4870,11 +3228,6 @@ async function addNews(){
         console.error("KITOBXON: PDF.js yuklanmadi", error);
     }
 })();
-</script>
-
-<script src="https://cdn.jsdelivr.net/npm/epubjs/dist/epub.min.js"></script>
-<script>
-    console.log("KITOBXON: EPUB.js yuklandi");
 </script>
 
 </body>

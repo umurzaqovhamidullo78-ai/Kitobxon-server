@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kitobxon — Yagona kutubxona tizimi</title>
+<style>
+*{box-sizing:border-box}
+:root{
+  --green:#16834b;
+  --green2:#20a461;
+  --light:#eef8f2;
+  --dark:#12352a;
+  --text:#183027;
+  --muted:#6b7b74;
+  --white:#fff;
+  --danger:#d63b3b;
+  --shadow:0 8px 25px rgba(20,70,45,.09);
+}
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:#f5f8f6;
+  color:var(--text);
+}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.header{
+  position:sticky;
+  top:0;
+  z-index:20;
+  background:var(--white);
+  box-shadow:0 2px 12px rgba(0,0,0,.07);
+}
+.header-inner{
+  max-width:1200px;
+  margin:auto;
+  padding:14px 18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+}
+.logo{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-weight:800;
+  color:var(--green);
+  font-size:20px;
+}
+.logo-icon{
+  width:42px;
+  height:42px;
+  border-radius:13px;
+  background:var(--green);
+  color:white;
+  display:grid;
+  place-items:center;
+  font-size:23px;
+}
+.header-actions{
+  display:flex;
+  gap:8px;
+}
+.icon-btn{
+  border:0;
+  background:var(--light);
+  width:42px;
+  height:42px;
+  border-radius:12px;
+  color:var(--green);
+  font-size:19px;
+}
+.container{
+  max-width:1200px;
+  margin:auto;
+  padding:22px 18px 95px;
+}
+.hero{
+  background:linear-gradient(135deg,#116b3e,#23a361);
+  color:white;
+  border-radius:24px;
+  padding:28px;
+  box-shadow:var(--shadow);
+  margin-bottom:20px;
+}
+.hero h1{
+  margin:0 0 8px;
+  font-size:30px;
+}
+.hero p{margin:0 0 20px;opacity:.92}
+.search-box{
+  display:flex;
+  background:white;
+  border-radius:15px;
+  overflow:hidden;
+}
+.search-box input{
+  flex:1;
+  border:0;
+  padding:15px;
+  outline:none;
+  color:var(--text);
+}
+.search-box button{
+  border:0;
+  background:white;
+  padding:0 17px;
+  color:var(--green);
+  font-size:20px;
+}
+.section{
+  display:none;
+}
+.section.active{display:block}
+.section-title{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin:18px 0 14px;
+}
+.section-title h2{
+  margin:0;
+  font-size:22px;
+}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+  gap:16px;
+}
+.card{
+  background:white;
+  border-radius:18px;
+  padding:16px;
+  box-shadow:var(--shadow);
+}
+.book-card{
+  position:relative;
+  transition:.2s;
+}
+.book-card:hover{transform:translateY(-2px)}
+.cover{
+  height:190px;
+  border-radius:13px;
+  background:linear-gradient(145deg,#dff2e7,#a8d7ba);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:20px;
+  color:#145f3a;
+  font-weight:800;
+  font-size:20px;
+  margin-bottom:13px;
+}
+.book-card h3{
+  margin:5px 0;
+  font-size:17px;
+}
+.author{
+  color:var(--muted);
+  font-size:14px;
+}
+.badge{
+  display:inline-block;
+  background:var(--light);
+  color:var(--green);
+  border-radius:20px;
+  padding:5px 9px;
+  font-size:12px;
+  margin-top:8px;
+}
+.actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:13px;
+}
+.btn{
+  border:0;
+  border-radius:11px;
+  padding:10px 13px;
+  background:var(--green);
+  color:white;
+}
+.btn.secondary{
+  background:var(--light);
+  color:var(--green);
+}
+.btn.danger{
+  background:#fdecec;
+  color:var(--danger);
+}
+.btn.full{width:100%}
+.nav{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  z-index:30;
+  background:white;
+  border-top:1px solid #e6eee9;
+  display:flex;
+  justify-content:center;
+}
+.nav-inner{
+  width:100%;
+  max-width:900px;
+  display:flex;
+  overflow-x:auto;
+}
+.nav button{
+  flex:1;
+  min-width:95px;
+  padding:10px 5px 9px;
+  border:0;
+  background:white;
+  color:#708078;
+  font-size:12px;
+}
+.nav button.active{
+  color:var(--green);
+  font-weight:700;
+}
+.nav-icon{
+  display:block;
+  font-size:20px;
+  margin-bottom:3px;
+}
+.info-list{
+  display:grid;
+  gap:10px;
+}
+.info-row{
+  padding:13px;
+  background:#f7faf8;
+  border-radius:12px;
+}
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.48);
+  z-index:100;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+}
+.modal.show{display:flex}
+.modal-box{
+  width:min(620px,100%);
+  max-height:90vh;
+  overflow:auto;
+  background:white;
+  border-radius:22px;
+  padding:22px;
+}
+.modal-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+}
+.close{
+  border:0;
+  background:#f1f4f2;
+  width:38px;
+  height:38px;
+  border-radius:50%;
+}
+.form{
+  display:grid;
+  gap:12px;
+  margin-top:15px;
+}
+.form label{
+  font-weight:700;
+  font-size:14px;
+}
+.form input,.form select,.form textarea{
+  width:100%;
+  border:1px solid #dce7e1;
+  border-radius:11px;
+  padding:12px;
+  outline:none;
+}
+.form input:focus,.form select:focus,.form textarea:focus{
+  border-color:var(--green);
+}
+.empty{
+  text-align:center;
+  padding:35px 15px;
+  color:var(--muted);
+}
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin-top:15px;
+}
+.stat{
+  background:white;
+  border-radius:16px;
+  padding:18px;
+  box-shadow:var(--shadow);
+  text-align:center;
+}
+.stat strong{
+  display:block;
+  font-size:25px;
+  color:var(--green);
+}
+.notice{
+  padding:14px;
+  background:#fff8df;
+  border-radius:13px;
+  margin-bottom:14px;
+}
+.news{
+  border-left:4px solid var(--green);
+}
+.favorite{
+  position:absolute;
+  right:13px;
+  top:13px;
+  width:37px;
+  height:37px;
+  border:0;
+  border-radius:50%;
+  background:white;
+  box-shadow:0 3px 12px rgba(0,0,0,.1);
+}
+@media(max-width:650px){
+  .hero h1{font-size:24px}
+  .container{padding-left:12px;padding-right:12px}
+  .grid{grid-template-columns:repeat(2,1fr);gap:10px}
+  .cover{height:160px;font-size:16px}
+  .card{padding:12px}
+  .stats{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-icon">📚</div>
+      <div>KITOBXON</div>
+    </div>
+    <div class="header-actions">
+  <select id="headerLanguageSelect" onchange="setLanguage(this.value)">
+    <option value="uz">O‘zbekcha</option>
+    <option value="ru">Русский</option>
+    <option value="en">English</option>
+  </select>
+  <button class="icon-btn" onclick="showSection('profile')">👤</button>
+  <button class="icon-btn" onclick="showNotifications()">🔔</button>
+</div>
+  </div>
+</header>
+<main class="container">
+<section id="home" class="section active">
+  <div class="hero">
+    <h1>Kitobxon ilovasiga xush kelibsiz!</h1>
+    <p>Kitoblar, kutubxonalar va bilimlar — bir joyda.</p>
+    <div class="search-box">
+      <input id="homeSearch" placeholder="Kitob yoki muallifni qidiring...">
+      <button onclick="searchFromHome()">🔎</button>
+    </div>
+  </div>
+  <div class="stats">
+    <div class="stat"><strong id="statBooks">0</strong>Kitob</div>
+    <div class="stat"><strong id="statLibraries">1</strong>Kutubxona</div>
+    <div class="stat"><strong id="statFav">0</strong>Sevimli</div>
+  </div>
+  <div class="section-title">
+    <h2>📚 Mashhur kitoblar</h2>
+    <button class="btn secondary" onclick="showSection('books')">Barchasi</button>
+  </div>
+  <div id="homeBooks" class="grid"></div>
+  <div class="section-title">
+    <h2>📰 So‘nggi yangiliklar</h2>
+  </div>
+  <div id="homeNews" class="grid"></div>
+</section>
+<section id="books" class="section">
+  <div class="section-title">
+    <h2>📚 Kitoblar</h2>
+    <button class="btn" onclick="openAddBook()">➕ Kitob qo‘shish</button>
+  </div>
+  <div class="card">
+    <input id="bookFilter" oninput="renderBooks()" placeholder="🔎 Kitob nomi, muallif yoki janr..." style="width:100%;padding:13px;border:1px solid #dce7e1;border-radius:12px">
+  </div>
+  <div id="booksGrid" class="grid" style="margin-top:16px"></div>
+</section>
+<section id="search" class="section">
+  <div class="section-title">
+    <h2>🔎 Qidiruv</h2>
+  </div>
+  <div class="card">
+    <div class="form">
+      <input id="searchInput" oninput="performSearch()" placeholder="Kitob nomi yoki muallif">
+      <select id="genreFilter" onchange="performSearch()">
+        <option value="">Barcha janrlar</option>
+      </select>
+    </div>
+  </div>
+  <div id="searchResults" class="grid" style="margin-top:16px"></div>
+</section>
+<section id="libraries" class="section">
+  <div class="section-title">
+    <h2>🏛 Kutubxonalar</h2>
+  </div>
+  <div class="card">
+    <h2>🏛 Namangan tumani Axborot-kutubxona markazi</h2>
+    <div class="info-list">
+      <div class="info-row">📍 <b>Hudud:</b> Namangan viloyati, Namangan tumani, Toshbuloq</div>
+      <div class="info-row">🕘 <b>Ish vaqti:</b> 09:00 — 18:00</div>
+      <div class="info-row">📚 <b>Xizmat:</b> Kitob qidirish, o‘qish va bron qilish</div>
+      <div class="info-row">📖 <b>Katalog:</b> Kitobxon elektron katalogi</div>
+    </div>
+  </div>
+</section>
+<section id="profile" class="section">
+  <div class="section-title">
+    <h2>👤 Mening kabinetim</h2>
+  </div>
+  <div class="card">
+    <h2>👤 Kitobxon</h2>
+    <p class="author">Foydalanuvchi kabineti</p>
+    <div class="actions">
+      <button class="btn" onclick="showFavorites()">❤️ Sevimlilar</button>
+      <button class="btn secondary" onclick="showHistory()">📖 O‘qish tarixi</button>
+      <button class="btn secondary" onclick="showReservations()">📌 Bronlarim</button>
+      <button class="btn secondary" onclick="showNotifications()">🔔 Bildirishnomalar</button>
+      <button class="btn" onclick="openOperator()">👨‍💼 Operator paneli</button>
+    </div>
+  </div>
+  <div id="profileContent" style="margin-top:16px"></div>
+</section>
+<section id="news" class="section">
+  <div class="section-title">
+    <h2>📰 Yangiliklar</h2>
+  </div>
+  <div id="newsGrid" class="grid"></div>
+</section>
+<section id="contact" class="section">
+  <div class="section-title">
+    <h2>📞 Aloqa</h2>
+  </div>
+  <div class="card">
+    <h2>📚 Namangan tumani AKM</h2>
+    <div class="info-list">
+      <div class="info-row">📍 Toshbuloq, Namangan tumani</div>
+      <div class="info-row">🕘 09:00 — 18:00</div>
+      <div class="info-row">📞 Kutubxona bilan bog‘lanish</div>
+    </div>
+    <div class="actions">
+      <button class="btn" onclick="openInquiry()">✉️ Murojaat yuborish</button>
+    </div>
+  </div>
+</section>
+</main>
+<nav class="nav">
+  <div class="nav-inner">
+    <button class="active" data-section="home" onclick="showSection('home')"><span class="nav-icon">🏠</span>Bosh sahifa</button>
+    <button data-section="books" onclick="showSection('books')"><span class="nav-icon">📚</span>Kitoblar</button>
+    <button data-section="search" onclick="showSection('search')"><span class="nav-icon">🔎</span>Qidiruv</button>
+    <button data-section="libraries" onclick="showSection('libraries')"><span class="nav-icon">🏛</span>Kutubxonalar</button>
+    <button data-section="profile" onclick="showSection('profile')"><span class="nav-icon">👤</span>Kabinet</button>
+    <button data-section="news" onclick="showSection('news')"><span class="nav-icon">📰</span>Yangiliklar</button>
+    <button data-section="contact" onclick="showSection('contact')"><span class="nav-icon">📞</span>Aloqa</button>
+  </div>
+</nav>
+<div id="modal" class="modal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h2 id="modalTitle">Kitob</h2>
+      <button class="close" onclick="closeModal()">✕</button>
+    </div>
+    <div id="modalBody"></div>
+  </div>
+</div>
+<script>
+const STORAGE_BOOKS="kitobxon_books_v2";
+const STORAGE_FAV="kitobxon_favorites_v2";
+const STORAGE_HISTORY="kitobxon_history_v2";
+const STORAGE_RES="kitobxon_reservations_v2";
+const STORAGE_NEWS="kitobxon_news_v2";
+const starterBooks=[
+ {
+  id:1,
+  title:"O‘tkan kunlar",
+  author:"Abdulla Qodiriy",
+  genre:"Roman",
+  year:"1926",
+  isbn:"978-9943",
+  library:"Namangan tumani AKM",
+  copies:5
+ },
+ {
+  id:2,
+  title:"Mehrobdan chayon",
+  author:"Abdulla Qodiriy",
+  genre:"Roman",
+  year:"1929",
+  isbn:"978-9943",
+  library:"Namangan tumani AKM",
+  copies:4
+ },
+ {
+  id:3,
+  title:"Ikki eshik orasi",
+  author:"O‘tkir Hoshimov",
+  genre:"Roman",
+  year:"1986",
+  isbn:"978-9943",
+  library:"Namangan tumani AKM",
+  copies:3
+ }
+];
+const starterNews=[
+ {id:1,title:"Yangi kitoblar fondi to‘ldirildi",text:"Kutubxona fondiga yangi adabiyotlar qo‘shildi.",date:"2026"},
+ {id:2,title:"Kitobxonlik tadbiri",text:"Kitobxonlar uchun ma’naviy-ma’rifiy uchrashuvlar tashkil etilmoqda.",date:"2026"},
+ {id:3,title:"Elektron katalog",text:"Kitoblarni tez va qulay qidirish imkoniyati mavjud.",date:"2026"}
+];
+let books=JSON.parse(localStorage.getItem(STORAGE_BOOKS)||"null")||starterBooks;
+let favorites=JSON.parse(localStorage.getItem(STORAGE_FAV)||"[]");
+let history=JSON.parse(localStorage.getItem(STORAGE_HISTORY)||"[]");
+let reservations=JSON.parse(localStorage.getItem(STORAGE_RES)||"[]");
+let news=JSON.parse(localStorage.getItem(STORAGE_NEWS)||"null")||starterNews;
+function saveAll(){
+ localStorage.setItem(STORAGE_BOOKS,JSON.stringify(books));
+ localStorage.setItem(STORAGE_FAV,JSON.stringify(favorites));
+ localStorage.setItem(STORAGE_HISTORY,JSON.stringify(history));
+ localStorage.setItem(STORAGE_RES,JSON.stringify(reservations));
+ localStorage.setItem(STORAGE_NEWS,JSON.stringify(news));
+}
+function showSection(id){
+ document.querySelectorAll(".section").forEach(x=>x.classList.remove("active"));
+ document.getElementById(id).classList.add("active");
+ document.querySelectorAll(".nav button").forEach(x=>{
+   x.classList.toggle("active",x.dataset.section===id);
+ });
+ if(id==="home")renderHome();
+ if(id==="books")renderBooks();
+ if(id==="search")performSearch();
+ if(id==="news")renderNews();
+ if(id==="profile")renderProfile();
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+function renderHome(){
+ document.getElementById("statBooks").textContent=books.length;
+ document.getElementById("statFav").textContent=favorites.length;
+ document.getElementById("homeBooks").innerHTML=
+ books.slice(0,3).map(bookCard).join("");
+ document.getElementById("homeNews").innerHTML=
+ news.slice(0,3).map(n=>`
+ <div class="card news">
+   <h3>${escapeHtml(n.title)}</h3>
+   <p>${escapeHtml(n.text)}</p>
+   <small>${escapeHtml(n.date)}</small>
+ </div>`).join("");
+}
+function bookCard(b){
+ const fav=favorites.includes(b.id);
+ return `
+ <div class="card book-card">
+   <button class="favorite" onclick="toggleFavorite(${b.id})">${fav?"❤️":"🤍"}</button>
+   <div class="cover">${escapeHtml(b.title)}</div>
+   <h3>${escapeHtml(b.title)}</h3>
+   <div class="author">${escapeHtml(b.author)}</div>
+   <span class="badge">${escapeHtml(b.genre)}</span>
+   <div class="actions">
+     <button class="btn full" onclick="openBook(${b.id})">📖 Batafsil</button>
+   </div>
+ </div>`;
+}
+function renderBooks(){
+ const q=(document.getElementById("bookFilter")?.value||"").toLowerCase();
+ const filtered=books.filter(b=>
+   `${b.title} ${b.author} ${b.genre}`.toLowerCase().includes(q)
+ );
+ document.getElementById("booksGrid").innerHTML=
+ filtered.length?filtered.map(bookCard).join(""):`<div class="card empty">Kitob topilmadi.</div>`;
+}
+function populateGenres(){
+ const select=document.getElementById("genreFilter");
+ const genres=[...new Set(books.map(b=>b.genre))];
+ select.innerHTML='<option value="">Barcha janrlar</option>'+
+ genres.map(g=>`<option value="${escapeAttr(g)}">${escapeHtml(g)}</option>`).join("");
+}
+function performSearch(){
+ const q=(document.getElementById("searchInput")?.value||"").toLowerCase();
+ const genre=document.getElementById("genreFilter")?.value||"";
+ const result=books.filter(b=>{
+   const text=`${b.title} ${b.author} ${b.genre} ${b.isbn||""}`.toLowerCase();
+   return text.includes(q)&&(genre===""||b.genre===genre);
+ });
+ document.getElementById("searchResults").innerHTML=
+ result.length?result.map(bookCard).join(""):`<div class="card empty">🔎 Hech qanday kitob topilmadi.</div>`;
+}
+function searchFromHome(){
+ const q=document.getElementById("homeSearch").value;
+ document.getElementById("searchInput").value=q;
+ showSection("search");
+ performSearch();
+}
+function openBook(id){
+ const b=books.find(x=>x.id===id);
+ if(!b)return;
+ if(!history.includes(id)){
+   history.unshift(id);
+   saveAll();
+ }
+ openModal(
+   "📖 "+b.title,
+   `
+   <div class="cover">${escapeHtml(b.title)}</div>
+   <div class="info-list">
+     <div class="info-row"><b>Muallif:</b> ${escapeHtml(b.author)}</div>
+     <div class="info-row"><b>Janr:</b> ${escapeHtml(b.genre)}</div>
+     <div class="info-row"><b>Nashr yili:</b> ${escapeHtml(b.year||"—")}</div>
+     <div class="info-row"><b>ISBN:</b> ${escapeHtml(b.isbn||"—")}</div>
+     <div class="info-row"><b>Kutubxona:</b> ${escapeHtml(b.library||"—")}</div>
+     <div class="info-row"><b>Nusxalar:</b> ${escapeHtml(String(b.copies??"—"))}</div>
+   </div>
+   <div class="actions">
+     <button class="btn" onclick="toggleFavorite(${b.id});openBook(${b.id})">❤️ Sevimliga qo‘shish</button>
+     <button class="btn secondary" onclick="reserveBook(${b.id})">📌 Bron qilish</button>
+     <button class="btn secondary" onclick="onlineRead(${b.id})">📖 Online o‘qish</button>
+     <button class="btn secondary" onclick="audioBook(${b.id})">🔊 Audio</button>
+   </div>
+   `
+ );
+}
+function toggleFavorite(id){
+ if(favorites.includes(id)){
+   favorites=favorites.filter(x=>x!==id);
+ }else{
+   favorites.unshift(id);
+ }
+ saveAll();
+ renderHome();
+ renderBooks();
+ performSearch();
+ renderProfile();
+ const favBox=document.getElementById("favoritesList");
+ if(favBox){
+   showFavorites();
+ }
+}
+function reserveBook(id){
+ const b=books.find(x=>x.id===id);
+ if(!b)return;
+ if(reservations.some(r=>r.bookId===id && r.status==="Kutilmoqda")){
+   alert("Bu kitob allaqachon bron qilingan.");
+   return;
+ }
+ reservations.unshift({
+   id:Date.now(),
+   bookId:id,
+   title:b.title,
+   date:new Date().toLocaleDateString("uz-UZ"),
+   status:"Kutilmoqda"
+ });
+ saveAll();
+ alert("✅ Kitob muvaffaqiyatli bron qilindi.");
+ closeModal();
+ renderProfile();
+}
+function onlineRead(id){
+ alert("📖 Elektron kitob funksiyasi serverga qonuniy elektron nashrlar ulangandan keyin ishga tushadi.");
+}
+function audioBook(id){
+ alert("🔊 Audio kitob funksiyasi qonuniy audio fayllar ulangandan keyin ishga tushadi.");
+}
+function showFavorites(){
+ showSection("profile");
+ const favBooks=books.filter(b=>favorites.includes(b.id));
+ document.getElementById("profileContent").innerHTML=`
+ <div class="section-title"><h2>❤️ Sevimli kitoblar</h2></div>
+ <div class="grid">
+ ${favBooks.length?favBooks.map(bookCard).join(""):`<div class="card empty">Hozircha sevimli kitoblar yo‘q.</div>`}
+ </div>`;
+}
+function showHistory(){
+ showSection("profile");
+ const items=history.map(id=>books.find(b=>b.id===id)).filter(Boolean);
+ document.getElementById("profileContent").innerHTML=`
+ <div class="section-title"><h2>📖 O‘qish tarixi</h2></div>
+ <div class="grid">
+ ${items.length?items.map(bookCard).join(""):`<div class="card empty">O‘qish tarixi hozircha bo‘sh.</div>`}
+ </div>`;
+}
+function showReservations(){
+ showSection("profile");
+ document.getElementById("profileContent").innerHTML=`
+ <div class="section-title"><h2>📌 Bronlarim</h2></div>
+ ${reservations.length?reservations.map(r=>`
+ <div class="card" style="margin-bottom:10px">
+   <h3>${escapeHtml(r.title)}</h3>
+   <p>📅 ${escapeHtml(r.date)}</p>
+   <span class="badge">${escapeHtml(r.status)}</span>
+ </div>`).join(""):`<div class="card empty">Hozircha bronlar yo‘q.</div>`}`;
+}
+function showNotifications(){
+ openModal("🔔 Bildirishnomalar",`
+ <div class="notice">📚 Kitobxon ilovasi ishga tushdi.</div>
+ <div class="notice">🔎 Elektron katalog orqali kitoblarni qidirishingiz mumkin.</div>
+ <div class="notice">📌 Kerakli kitobni bron qilishingiz mumkin.</div>
+ `);
+}
+function setLanguage(lang){
+ localStorage.setItem("kitobxonLanguage",lang);
+
+ const translations={
+  uz:{
+   home:"Bosh sahifa",books:"Kitoblar",search:"Qidiruv",libraries:"Kutubxonalar",
+   profile:"Kabinet",news:"Yangiliklar",contact:"Aloqa",
+   welcome:"Kitobxon ilovasiga xush kelibsiz!",
+   subtitle:"Kitoblar, kutubxonalar va bilimlar — bir joyda.",
+   homeSearch:"Kitob yoki muallifni qidiring...",
+   book:"Kitob",library:"Kutubxona",favorite:"Sevimli",
+   popular:"Mashhur kitoblar",all:"Barchasi",latestNews:"So‘nggi yangiliklar",
+   addBook:"Kitob qo‘shish",bookFilter:"Kitob nomi, muallif yoki janr...",
+   bookAuthor:"Kitob nomi yoki muallif",allGenres:"Barcha janrlar",
+   noBook:"Kitob topilmadi.",noSearch:"Hech qanday kitob topilmadi.",
+   myCabinet:"Mening kabinetim",userCabinet:"Foydalanuvchi kabineti",
+   favorites:"Sevimlilar",history:"O‘qish tarixi",reservations:"Bronlarim",
+   notifications:"Bildirishnomalar",operator:"Operator paneli",
+author:"Muallif",genre:"Janr",year:"Nashr yili",isbn:"ISBN",copies:"Nusxalar",
+reserve:"Bron qilish",onlineRead:"Online o‘qish",audio:"Audio",
+favoriteAdd:"Sevimliga qo‘shish",alreadyReserved:"Bu kitob allaqachon bron qilingan.",
+reservedSuccess:"✅ Kitob muvaffaqiyatli bron qilindi.",
+onlineMsg:"📖 Elektron kitob funksiyasi serverga qonuniy elektron nashrlar ulangandan keyin ishga tushadi.",
+audioMsg:"🔊 Audio kitob funksiyasi qonuniy audio fayllar ulangandan keyin ishga tushadi.",
+favoritesTitle:"Sevimli kitoblar",noFavorites:"Hozircha sevimli kitoblar yo‘q.",
+historyTitle:"O‘qish tarixi",noHistory:"O‘qish tarixi hozircha bo‘sh.",
+reservationsTitle:"Bronlarim",noReservations:"Hozircha bronlar yo‘q.",
+notificationsTitle:"Bildirishnomalar",
+notice1:"📚 Kitobxon ilovasi ishga tushdi.",
+notice2:"🔎 Elektron katalog orqali kitoblarni qidirishingiz mumkin.",
+notice3:"📌 Kerakli kitobni bron qilishingiz mumkin.",
+addBookTitle:"Yangi kitob qo‘shish",bookTitle:"Kitob nomi",bookAuthorLabel:"Muallif",
+genreLabel:"Janr",isbnLabel:"ISBN",yearLabel:"Nashr yili",libraryLabel:"Kutubxona",
+addressLabel:"Manzil",inventoryLabel:"Inventar raqami",copiesLabel:"Nusxalar soni",
+saveBook:"Kitobni saqlash",bookAdded:"✅ Kitob qo‘shildi!",pending:"Kutilmoqda",
+  },
+  ru:{
+   home:"Главная",books:"Книги",search:"Поиск",libraries:"Библиотеки",
+   profile:"Кабинет",news:"Новости",contact:"Контакты",
+   welcome:"Добро пожаловать в приложение Kitobxon!",
+   subtitle:"Книги, библиотеки и знания — в одном месте.",
+   homeSearch:"Поиск книги или автора...",
+   book:"Книга",library:"Библиотека",favorite:"Избранное",
+   popular:"Популярные книги",all:"Все",latestNews:"Последние новости",
+   addBook:"Добавить книгу",bookFilter:"Название книги, автор или жанр...",
+   bookAuthor:"Название книги или автор",allGenres:"Все жанры",
+   noBook:"Книга не найдена.",noSearch:"Книги не найдены.",
+   myCabinet:"Мой кабинет",userCabinet:"Кабинет читателя",
+   favorites:"Избранное",history:"История чтения",reservations:"Мои бронирования",
+   notifications:"Уведомления",operator:"Панель оператора"
+  },
+  en:{
+   home:"Home",books:"Books",search:"Search",libraries:"Libraries",
+   profile:"Account",news:"News",contact:"Contact",
+   welcome:"Welcome to the Kitobxon app!",
+   subtitle:"Books, libraries and knowledge — all in one place.",
+   homeSearch:"Search for a book or author...",
+   book:"Book",library:"Library",favorite:"Favorite",
+   popular:"Popular books",all:"All",latestNews:"Latest news",
+   addBook:"Add book",bookFilter:"Book title, author or genre...",
+   bookAuthor:"Book title or author",allGenres:"All genres",
+   noBook:"Book not found.",noSearch:"No books found.",
+   myCabinet:"My account",userCabinet:"Reader account",
+   favorites:"Favorites",history:"Reading history",reservations:"My reservations",
+   notifications:"Notifications",operator:"Operator panel"
+  }
+ };
+
+ window.kitobxonTranslations=translations;
+ const t=translations[lang]||translations.uz;
+
+ document.querySelectorAll(".nav button").forEach((b,i)=>{
+  const keys=["home","books","search","libraries","profile","news","contact"];
+  const span=b.querySelector(".nav-icon");
+  if(span)b.innerHTML=span.outerHTML+t[keys[i]];
+ });
+
+ const setText=(selector,text)=>{
+  const el=document.querySelector(selector);
+  if(el)el.textContent=text;
+ };
+ const setPlaceholder=(selector,text)=>{
+  const el=document.querySelector(selector);
+  if(el)el.placeholder=text;
+ };
+
+ setText("#home .hero h1",t.welcome);
+ setText("#home .hero p",t.subtitle);
+ setPlaceholder("#homeSearch",t.homeSearch);
+
+ setText("#home .section-title h2", "📚 "+t.popular);
+ const homeButtons=document.querySelectorAll("#home .section-title .btn");
+ if(homeButtons[0])homeButtons[0].textContent=t.all;
+
+ const booksTitle=document.querySelector("#books .section-title h2");
+ if(booksTitle)booksTitle.textContent="📚 "+t.books;
+ const addBtn=document.querySelector("#books .section-title .btn");
+ if(addBtn)addBtn.textContent="➕ "+t.addBook;
+ setPlaceholder("#bookFilter","🔎 "+t.bookFilter);
+
+ const searchTitle=document.querySelector("#search .section-title h2");
+ if(searchTitle)searchTitle.textContent="🔎 "+t.search;
+ setPlaceholder("#searchInput",t.bookAuthor);
+
+ const genre=document.querySelector("#genreFilter option[value='']");
+ if(genre)genre.textContent=t.allGenres;
+
+ const librariesTitle=document.querySelector("#libraries .section-title h2");
+ if(librariesTitle)librariesTitle.textContent="🏛 "+t.libraries;
+
+ const profileTitle=document.querySelector("#profile .section-title h2");
+ if(profileTitle)profileTitle.textContent="👤 "+t.myCabinet;
+
+ const newsTitle=document.querySelector("#news .section-title h2");
+ if(newsTitle)newsTitle.textContent="📰 "+t.news;
+
+ const contactTitle=document.querySelector("#contact .section-title h2");
+ if(contactTitle)contactTitle.textContent="📞 "+t.contact;
+
+ const sel=document.getElementById("headerLanguageSelect");
+ if(sel)sel.value=lang;
+
+ renderHome();
+ renderBooks();
+ performSearch();
+ renderProfile();
+ renderNews();
+}
+
+function tr(key){
+ const lang=localStorage.getItem("kitobxonLanguage")||"uz";
+ const t=window.kitobxonTranslations;
+ return (t&&t[lang]&&t[lang][key])||key;
+}
+
+function renderProfile(){
+ document.getElementById("profileContent").innerHTML=`
+ <div class="stats">
+   <div class="stat"><strong>${favorites.length}</strong>${tr("favorite")}</div>
+   <div class="stat"><strong>${history.length}</strong>${tr("history")}</div>
+   <div class="stat"><strong>${reservations.length}</strong>${tr("reservations")}</div>
+ </div>`;
+}
+function renderNews(){
+ document.getElementById("newsGrid").innerHTML=news.map(n=>`
+ <div class="card news">
+   <h3>${escapeHtml(n.title)}</h3>
+   <p>${escapeHtml(n.text)}</p>
+   <small>${escapeHtml(n.date)}</small>
+ </div>`).join("");
+}
+function openAddBook(){
+ openModal("➕ Yangi kitob qo‘shish",`
+ <form class="form" onsubmit="addBook(event)">
+   <label>Kitob nomi</label>
+   <input id="newTitle" required>
+   <label>Muallif</label>
+   <input id="newAuthor" required>
+   <label>Janr</label>
+   <input id="newGenre" required>
+   <label>ISBN</label>
+   <input id="newISBN">
+   <label>Nashr yili</label>
+   <input id="newYear" type="number">
+   <label>Kutubxona</label>
+   <input id="newLibrary" value="Namangan tumani AKM">
+   <label>Manzil</label>
+   <input id="newAddress" value="Toshbuloq, Namangan tumani">
+   <label>Inventar raqami</label>
+   <input id="newInventory">
+   <label>Nusxalar soni</label>
+   <input id="newCopies" type="number" min="1" value="1">
+   <button class="btn" type="submit">💾 Kitobni saqlash</button>
+ </form>
+ `);
+}
+function addBook(e){
+ e.preventDefault();
+ const book={
+   id:Date.now(),
+   title:document.getElementById("newTitle").value.trim(),
+   author:document.getElementById("newAuthor").value.trim(),
+   genre:document.getElementById("newGenre").value.trim(),
+   isbn:document.getElementById("newISBN").value.trim(),
+   year:document.getElementById("newYear").value.trim(),
+   library:document.getElementById("newLibrary").value.trim(),
+   address:document.getElementById("newAddress").value.trim(),
+   inventory:document.getElementById("newInventory").value.trim(),
+   copies:Number(document.getElementById("newCopies").value)||1
+ };
+ books.unshift(book);
+ saveAll();
+ populateGenres();
+ closeModal();
+ renderBooks();
+ renderHome();
+ alert("✅ Kitob qo‘shildi!");
+}
+function openOperator(){
+ openModal("👨‍💼 Operator paneli",`
+ <div class="notice">
+ <b>Operator rejimi</b><br>
+ Бу ҳозирги прототипда локал режим. Кейин серверда ҳақиқий логин ва ролларга уланади.
+ </div>
+ <div class="actions">
+   <button class="btn" onclick="openAddBook()">➕ Kitob qo‘shish</button>
+   <button class="btn secondary" onclick="manageBooks()">📚 Kitoblarni boshqarish</button>
+   <button class="btn secondary" onclick="addNews()">📰 Yangilik qo‘shish</button>
+ </div>
+ `);
+}
+function manageBooks(){
+ openModal("📚 Kitoblarni boshqarish",`
+ <div>
+ ${books.map(b=>`
+ <div class="card" style="margin:8px 0">
+   <b>${escapeHtml(b.title)}</b>
+   <div class="author">${escapeHtml(b.author)}</div>
+   <div class="actions">
+     <button class="btn secondary" onclick="editBook(${b.id})">✏️ Tahrirlash</button>
+     <button class="btn danger" onclick="deleteBook(${b.id})">🗑 O‘chirish</button>
+   </div>
+ </div>`).join("")}
+ </div>
+ `);
+}
+function editBook(id){
+ const b=books.find(x=>x.id===id);
+ if(!b)return;
+ openModal("✏️ Kitobni tahrirlash",`
+ <form class="form" onsubmit="updateBook(event,${id})">
+   <label>Kitob nomi</label>
+   <input id="editTitle" value="${escapeAttr(b.title)}" required>
+   <label>Muallif</label>
+   <input id="editAuthor" value="${escapeAttr(b.author)}" required>
+   <label>Janr</label>
+   <input id="editGenre" value="${escapeAttr(b.genre)}" required>
+   <label>ISBN</label>
+   <input id="editISBN" value="${escapeAttr(b.isbn||"")}">
+   <label>Nashr yili</label>
+   <input id="editYear" value="${escapeAttr(b.year||"")}">
+   <label>Nusxalar</label>
+   <input id="editCopies" type="number" min="1" value="${b.copies||1}">
+   <button class="btn">💾 Saqlash</button>
+ </form>
+ `);
+}
+function updateBook(e,id){
+ e.preventDefault();
+ const b=books.find(x=>x.id===id);
+ if(!b)return;
+ b.title=document.getElementById("editTitle").value.trim();
+ b.author=document.getElementById("editAuthor").value.trim();
+ b.genre=document.getElementById("editGenre").value.trim();
+ b.isbn=document.getElementById("editISBN").value.trim();
+ b.year=document.getElementById("editYear").value.trim();
+ b.copies=Number(document.getElementById("editCopies").value)||1;
+ saveAll();
+ populateGenres();
+ closeModal();
+ renderBooks();
+ renderHome();
+ alert("✅ Kitob ma’lumotlari yangilandi.");
+}
+function deleteBook(id){
+ const b=books.find(x=>x.id===id);
+ if(!b)return;
+ if(!confirm(`"${b.title}" kitobini o‘chirishni xohlaysizmi?`))return;
+ books=books.filter(x=>x.id!==id);
+ favorites=favorites.filter(x=>x!==id);
+ history=history.filter(x=>x!==id);
+ reservations=reservations.filter(x=>x.bookId!==id);
+ saveAll();
+ populateGenres();
+ manageBooks();
+ renderHome();
+ renderBooks();
+}
+function addNews(){
+ openModal("📰 Yangilik qo‘shish",`
+ <form class="form" onsubmit="saveNews(event)">
+   <label>Sarlavha</label>
+   <input id="newsTitle" required>
+   <label>Matn</label>
+   <textarea id="newsText" rows="5" required></textarea>
+   <button class="btn">💾 Yangilikni saqlash</button>
+ </form>
+ `);
+}
+function saveNews(e){
+ e.preventDefault();
+ news.unshift({
+   id:Date.now(),
+   title:document.getElementById("newsTitle").value.trim(),
+   text:document.getElementById("newsText").value.trim(),
+   date:new Date().toLocaleDateString("uz-UZ")
+ });
+ saveAll();
+ closeModal();
+ renderNews();
+ renderHome();
+ alert("✅ Yangilik qo‘shildi.");
+}
+function openInquiry(){
+ openModal("✉️ Murojaat yuborish",`
+ <form class="form" onsubmit="sendInquiry(event)">
+   <label>Ismingiz</label>
+   <input id="inqName" required>
+   <label>Murojaat</label>
+   <textarea id="inqText" rows="5" required></textarea>
+   <button class="btn">📨 Yuborish</button>
+ </form>
+ `);
+}
+function sendInquiry(e){
+ e.preventDefault();
+ alert("✅ Murojaatingiz qabul qilindi. Serverga ulangandan so‘ng murojaat kutubxona operatoriga yuboriladi.");
+ closeModal();
+}
+function openModal(title,body){
+ document.getElementById("modalTitle").textContent=title;
+ document.getElementById("modalBody").innerHTML=body;
+ document.getElementById("modal").classList.add("show");
+}
+function closeModal(){
+ document.getElementById("modal").classList.remove("show");
+}
+document.getElementById("modal").addEventListener("click",e=>{
+ if(e.target.id==="modal")closeModal();
+});
+function escapeHtml(value){
+ return String(value??"")
+ .replaceAll("&","&amp;")
+ .replaceAll("<","&lt;")
+ .replaceAll(">","&gt;")
+ .replaceAll('"',"&quot;")
+ .replaceAll("'","&#039;");
+}
+function escapeAttr(value){
+ return escapeHtml(value);
+}
+function init(){
+ populateGenres();
+ renderHome();
+ renderBooks();
+ performSearch();
+ renderNews();
+ renderProfile();
+ saveAll();
+}
+init();
+</script>
+</body>
+</html>

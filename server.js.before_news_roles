@@ -7,8 +7,7 @@ const multer = require("multer");
 const fs = require("fs");
 
 const uploadDir = path.join(__dirname, "uploads", "news");
-fs.mkdirSync(uploadDir, { recursive
-    : true });
+fs.mkdirSync(uploadDir, { recursive: true });
 
 const upload = multer({
     dest: uploadDir,
@@ -196,21 +195,6 @@ app.get("/api/libraries", (req, res) => {
     res.json({
         success: true,
         data: libraries
-    });
-});
-
-// ===============================
- // MEMBER COUNT
- // ===============================
-
-app.get("/api/member-count", (req, res) => {
-    const row = db
-        .prepare("SELECT COUNT(*) AS count FROM users WHERE role = 'reader'")
-        .get();
-
-    res.json({
-        success: true,
-        count: Number(row.count) || 0
     });
 });
 
@@ -824,25 +808,15 @@ app.get("/api/news", (req, res) => {
     });
 });
 
-app.post("/api/news", requireAuth, upload.single("image"), (req, res) => {
-    if (req.user.role !== "operator") {
-        return res.status(403).json({
-            success: false,
-            message: "Faqat operatorlar yangilik qo‘sha oladi"
-        });
-    }
-
-    if (!req.user.library_id) {
-        return res.status(403).json({
-            success: false,
-            message: "Sizga hali kutubxona biriktirilmagan"
-        });
-    }
-
+app.post("/api/news", upload.single("image"), (req, res) => {
     const {
         title,
         text
     } = req.body;
+
+    const image = req.file
+        ? "/uploads/news/" + req.file.filename
+        : "";
 
     if (!title || !text) {
         return res.status(400).json({
@@ -851,19 +825,14 @@ app.post("/api/news", requireAuth, upload.single("image"), (req, res) => {
         });
     }
 
-    const image = req.file
-        ? "/uploads/news/" + req.file.filename
-        : "";
-
     const result = db.prepare(`
         INSERT INTO news
-        (title, text, image, library_id)
-        VALUES (?, ?, ?, ?)
+        (title, text, image)
+        VALUES (?, ?, ?)
     `).run(
         title,
         text,
-        image,
-        Number(req.user.library_id)
+        image || ""
     );
 
     res.json({
@@ -872,125 +841,19 @@ app.post("/api/news", requireAuth, upload.single("image"), (req, res) => {
     });
 });
 
-app.put("/api/news/:id", requireAuth, upload.single("image"), (req, res) => {
-    if (req.user.role !== "operator") {
-        return res.status(403).json({
-            success: false,
-            message: "Faqat operatorlar yangilik tahrirlay oladi"
-        });
-    }
-
-    if (!req.user.library_id) {
-        return res.status(403).json({
-            success: false,
-            message: "Sizga hali kutubxona biriktirilmagan"
-        });
-    }
-
+app.delete("/api/news/:id", (req, res) => {
     const id = Number(req.params.id);
-
-    const news = db.prepare(`
-        SELECT image, library_id
-        FROM news
-        WHERE id = ?
-    `).get(id);
+    const news = db.prepare("SELECT image FROM news WHERE id = ?").get(id);
 
     if (!news) {
         return res.status(404).json({
             success: false,
             message: "Yangilik topilmadi"
-        });
-    }
-
-    if (Number(news.library_id) !== Number(req.user.library_id)) {
-        return res.status(403).json({
-            success: false,
-            message: "Siz faqat o‘zingizga biriktirilgan kutubxona yangiliklarini boshqara olasiz"
-        });
-    }
-
-    const title = String(req.body.title || "").trim();
-    const text = String(req.body.text || "").trim();
-
-    if (!title || !text) {
-        return res.status(400).json({
-            success: false,
-            message: "Yangilik nomi va matni kerak"
-        });
-    }
-
-    let image = news.image || "";
-
-    if (req.file) {
-        if (news.image && news.image.startsWith("/uploads/news/")) {
-            const oldPath = path.join(
-                __dirname,
-                news.image.replace(/^\//, "")
-            );
-
-            if (fs.existsSync(oldPath)) {
-                fs.unlinkSync(oldPath);
-            }
-        }
-
-        image = "/uploads/news/" + req.file.filename;
-    }
-
-    db.prepare(`
-        UPDATE news
-        SET title = ?, text = ?, image = ?
-        WHERE id = ?
-    `).run(title, text, image, id);
-
-    res.json({
-        success: true,
-        message: "Yangilik yangilandi"
-    });
-});
-
-app.delete("/api/news/:id", requireAuth, (req, res) => {
-    if (req.user.role !== "operator") {
-        return res.status(403).json({
-            success: false,
-            message: "Faqat operatorlar yangilik o‘chira oladi"
-        });
-    }
-
-    if (!req.user.library_id) {
-        return res.status(403).json({
-            success: false,
-            message: "Sizga hali kutubxona biriktirilmagan"
-        });
-    }
-
-    const id = Number(req.params.id);
-
-    const news = db.prepare(`
-        SELECT image, library_id
-        FROM news
-        WHERE id = ?
-    `).get(id);
-
-    if (!news) {
-        return res.status(404).json({
-            success: false,
-            message: "Yangilik topilmadi"
-        });
-    }
-
-    if (Number(news.library_id) !== Number(req.user.library_id)) {
-        return res.status(403).json({
-            success: false,
-            message: "Siz faqat o‘zingizga biriktirilgan kutubxona yangiliklarini boshqara olasiz"
         });
     }
 
     if (news.image && news.image.startsWith("/uploads/news/")) {
-        const filePath = path.join(
-            __dirname,
-            news.image.replace(/^\//, "")
-        );
-
+        const filePath = path.join(__dirname, news.image.replace(/^\//, ""));
         if (fs.existsSync(filePath)) {
             fs.unlinkSync(filePath);
         }
@@ -1335,182 +1198,21 @@ app.get("/api/admin/pending-users", requireAuth, (req, res) => {
 
     const users = db.prepare(`
         SELECT
-            users.id,
-            users.name,
-            users.phone,
-            users.role,
-            users.library_id,
-            libraries.name AS library_name,
-            users.approved,
-            users.created_at
+            id,
+            name,
+            phone,
+            role,
+            library_id,
+            approved,
+            created_at
         FROM users
-        LEFT JOIN libraries ON libraries.id = users.library_id
-        WHERE users.approved = 0
-        ORDER BY users.id DESC
+        WHERE approved = 0
+        ORDER BY id DESC
     `).all();
 
     res.json({
         success: true,
         data: users
-    });
-});
-
-// ADMIN — ALL USERS
-// ===============================
-
-app.get("/api/admin/users", requireAuth, (req, res) => {
-    if (!["district_admin", "region_admin", "republic_admin"].includes(req.user.role)) {
-        return res.status(403).json({
-            success: false,
-            message: "Sizda foydalanuvchilarni ko‘rish uchun ruxsat yo‘q"
-        });
-    }
-
-    const users = db.prepare(`
-        SELECT
-            users.id,
-            users.name,
-            users.phone,
-            users.role,
-            users.library_id,
-            libraries.name AS library_name,
-            users.approved,
-            users.created_at,
-            (
-                SELECT COUNT(*)
-                FROM reservations
-                WHERE reservations.user_id = users.id
-            ) AS reservations_count
-        FROM users
-        LEFT JOIN libraries ON libraries.id = users.library_id
-        ORDER BY users.id DESC
-    `).all();
-
-    res.json({
-        success: true,
-        data: users
-    });
-});
-
-// ADMIN — ALL OPERATORS
-// ===============================
-
-app.get("/api/admin/operators", requireAuth, (req, res) => {
-    if (!["district_admin", "region_admin", "republic_admin"].includes(req.user.role)) {
-        return res.status(403).json({
-            success: false,
-            message: "Sizda operatorlarni ko‘rish uchun ruxsat yo‘q"
-        });
-    }
-
-    const operators = db.prepare(`
-        SELECT
-            users.id,
-            users.name,
-            users.phone,
-            users.role,
-            users.library_id,
-            libraries.name AS library_name,
-            users.approved,
-            users.approved_by,
-            users.approved_at,
-            users.created_at,
-
-            (
-                SELECT COUNT(*)
-                FROM books
-                WHERE books.library_id = users.library_id
-            ) AS books_count,
-
-            (
-                SELECT COUNT(*)
-                FROM reservations
-                INNER JOIN books
-                    ON books.id = reservations.book_id
-                WHERE books.library_id = users.library_id
-            ) AS reservations_count,
-
-            (
-                SELECT COUNT(*)
-                FROM news
-                WHERE news.library_id = users.library_id
-            ) AS news_count
-
-        FROM users
-        LEFT JOIN libraries ON libraries.id = users.library_id
-        WHERE users.role = 'operator'
-        ORDER BY users.id DESC
-    `).all();
-
-    res.json({
-        success: true,
-        data: operators
-    });
-});
-
-// ADMIN — OPERATOR STATISTICS
-// ===============================
-
-app.get("/api/admin/operators/:id/stats", requireAuth, (req, res) => {
-    if (!["district_admin", "region_admin", "republic_admin"].includes(req.user.role)) {
-        return res.status(403).json({
-            success: false,
-            message: "Sizda operator statistikasi uchun ruxsat yo‘q"
-        });
-    }
-
-    const operatorId = Number(req.params.id);
-
-    if (!operatorId) {
-        return res.status(400).json({
-            success: false,
-            message: "Operator ID kerak"
-        });
-    }
-
-    const operator = db.prepare(`
-        SELECT id, name, library_id
-        FROM users
-        WHERE id = ? AND role = 'operator'
-    `).get(operatorId);
-
-    if (!operator) {
-        return res.status(404).json({
-            success: false,
-            message: "Operator topilmadi"
-        });
-    }
-
-    const libraryId = operator.library_id;
-
-    const books = db.prepare(`
-        SELECT COUNT(*) AS count
-        FROM books
-        WHERE library_id = ?
-    `).get(libraryId).count;
-
-    const reservations = db.prepare(`
-        SELECT COUNT(*) AS count
-        FROM reservations r
-        INNER JOIN books b ON b.id = r.book_id
-        WHERE b.library_id = ?
-    `).get(libraryId).count;
-
-    const news = db.prepare(`
-        SELECT COUNT(*) AS count
-        FROM news
-        WHERE library_id = ?
-    `).get(libraryId).count;
-
-    res.json({
-        success: true,
-        data: {
-            operator_id: operator.id,
-            library_id: libraryId,
-            books: books,
-            reservations: reservations,
-            news: news
-        }
     });
 });
 
