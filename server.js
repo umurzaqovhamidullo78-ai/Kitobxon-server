@@ -49,58 +49,6 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 const db = new Database("kitobxon.db");
 // ===============================
-// BIRINCHI ADMINNI YARATISH
-// ===============================
-if (db.prepare("SELECT COUNT(*) AS count FROM users").get().count === 0) {
-
-    const readline = require("readline");
-
-    const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout
-    });
-
-    const savol = (matn) =>
-        new Promise(resolve => rl.question(matn, resolve));
-
-    (async () => {
-
-        console.log("\n=== KITOBXON BIRINCHI ADMIN ===");
-
-        const name = await savol("Admin ismi: ");
-        const phone = await savol("Admin telefoni: ");
-        const password = await savol("Admin paroli: ");
-
-        if (!name.trim() || !phone.trim() || !password) {
-            console.log("❌ Ma'lumotlar to‘liq kiritilmadi.");
-            rl.close();
-            return;
-        }
-
-        const salt = crypto.randomBytes(16).toString("hex");
-        const hash = crypto.scryptSync(password, salt, 64).toString("hex");
-        const passwordHash = `scrypt$${salt}$${hash}`;
-
-        db.prepare(`
-            INSERT INTO users
-            (name, phone, password, role, library_id, approved)
-            VALUES (?, ?, ?, 'district_admin', NULL, 1)
-        `).run(
-            name.trim(),
-            phone.trim(),
-            passwordHash
-        );
-
-        console.log("\n✅ DISTRICT ADMIN MUVAFFAQIYATLI YARATILDI!");
-        console.log("Telefon:", phone.trim());
-        console.log("Role: district_admin");
-        console.log("Approved: 1\n");
-
-        rl.close();
-
-    })();
-}
-// ===============================
 // DATABASE
 // ===============================
 
@@ -202,6 +150,18 @@ db.exec(`
         FOREIGN KEY(user_id) REFERENCES users(id)
     )
 `);
+
+// ===============================
+// FIRST ADMIN (OPTIONAL ENV SETUP)
+// ===============================
+if (process.env.ADMIN_NAME && process.env.ADMIN_PHONE && process.env.ADMIN_PASSWORD) {
+    const existingAdmin = db.prepare("SELECT id FROM users WHERE role = 'district_admin' LIMIT 1").get();
+    if (!existingAdmin) {
+        const passwordHash = hashPassword(process.env.ADMIN_PASSWORD);
+        db.prepare("INSERT INTO users (name, phone, password, role, library_id, approved) VALUES (?, ?, ?, 'district_admin', NULL, 1)").run(process.env.ADMIN_NAME.trim(), process.env.ADMIN_PHONE.trim(), passwordHash);
+        console.log("DISTRICT ADMIN avtomatik yaratildi:", process.env.ADMIN_PHONE.trim());
+    }
+}
 
 // ===============================
 // STARTER LIBRARY
