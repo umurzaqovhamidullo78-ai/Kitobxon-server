@@ -1926,75 +1926,7 @@ textarea{
    KITOBLAR
 ========================= */
 
-let books = JSON.parse(localStorage.getItem("kitobxon_books")) || [
-
-    {
-        id:1,
-        title:"O‘tkan kunlar",
-        author:"Abdulla Qodiriy",
-        genre:"Roman",
-        year:"1926",
-        isbn:"978-9943",
-        copies:5,
-        available:5
-    },
-
-    {
-        id:2,
-        title:"Mehrobdan chayon",
-        author:"Abdulla Qodiriy",
-        genre:"Roman",
-        year:"1929",
-        isbn:"978-9944",
-        copies:4,
-        available:4
-    },
-
-    {
-        id:3,
-        title:"Ikki eshik orasi",
-        author:"O‘tkir Hoshimov",
-        genre:"Roman",
-        year:"1986",
-        isbn:"978-9945",
-        copies:6,
-        available:6
-    },
-
-    {
-        id:4,
-        title:"Dunyoning ishlari",
-        author:"O‘tkir Hoshimov",
-        genre:"Qissa",
-        year:"1982",
-        isbn:"978-9946",
-        copies:3,
-        available:3
-    },
-
-    {
-        id:5,
-        title:"Alpomish",
-        author:"Xalq dostoni",
-        genre:"Doston",
-        year:"2020",
-        isbn:"978-9947",
-        copies:5,
-        available:5
-    },
-
-    {
-        id:6,
-        title:"Boburnoma",
-        author:"Zahiriddin Muhammad Bobur",
-        genre:"Tarix",
-        year:"1525",
-        isbn:"978-9948",
-        copies:2,
-        available:2
-    }
-
-];
+let books = JSON.parse(localStorage.getItem("kitobxon_books")) || [];
 
 let favorites =
     JSON.parse(localStorage.getItem("kitobxon_favorites")) || [];

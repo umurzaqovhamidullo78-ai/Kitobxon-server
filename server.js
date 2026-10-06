@@ -43,12 +43,63 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(cors());
-app.use(express.json({ limit: "30mb" }));
+app.use(express.json({ limit: "1000mb" }));
 app.use(express.static(__dirname));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 const db = new Database("kitobxon.db");
+// ===============================
+// BIRINCHI ADMINNI YARATISH
+// ===============================
+if (db.prepare("SELECT COUNT(*) AS count FROM users").get().count === 0) {
 
+    const readline = require("readline");
+
+    const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout
+    });
+
+    const savol = (matn) =>
+        new Promise(resolve => rl.question(matn, resolve));
+
+    (async () => {
+
+        console.log("\n=== KITOBXON BIRINCHI ADMIN ===");
+
+        const name = await savol("Admin ismi: ");
+        const phone = await savol("Admin telefoni: ");
+        const password = await savol("Admin paroli: ");
+
+        if (!name.trim() || !phone.trim() || !password) {
+            console.log("❌ Ma'lumotlar to‘liq kiritilmadi.");
+            rl.close();
+            return;
+        }
+
+        const salt = crypto.randomBytes(16).toString("hex");
+        const hash = crypto.scryptSync(password, salt, 64).toString("hex");
+        const passwordHash = `scrypt$${salt}$${hash}`;
+
+        db.prepare(`
+            INSERT INTO users
+            (name, phone, password, role, library_id, approved)
+            VALUES (?, ?, ?, 'district_admin', NULL, 1)
+        `).run(
+            name.trim(),
+            phone.trim(),
+            passwordHash
+        );
+
+        console.log("\n✅ DISTRICT ADMIN MUVAFFAQIYATLI YARATILDI!");
+        console.log("Telefon:", phone.trim());
+        console.log("Role: district_admin");
+        console.log("Approved: 1\n");
+
+        rl.close();
+
+    })();
+}
 // ===============================
 // DATABASE
 // ===============================
@@ -432,6 +483,44 @@ app.post("/api/books", requireAuth, requireLibraryPermission, (req, res) => {
 
     const copyCount = Number(copies) || 1;
 
+    // Bir xil kitobni qayta-qayta yaratmaslik uchun nom va muallifni tekshiramiz
+    const normalizeBookText = (value) =>
+        String(value ?? "")
+            .toLowerCase()
+            .replace(/ʻ|ʼ|‘|’/g, "'")
+            .replace(/\s+/g, " ")
+            .trim();
+
+    const normalizedTitle = normalizeBookText(title);
+    const normalizedAuthor = normalizeBookText(author);
+
+    const existingBook = db.prepare(`
+        SELECT id, copies, available
+        FROM books
+        WHERE LOWER(TRIM(title)) = ?
+          AND LOWER(TRIM(author)) = ?
+        LIMIT 1
+    `).get(normalizedTitle, normalizedAuthor);
+
+    if (existingBook) {
+        const newCopies = Number(existingBook.copies || 0) + copyCount;
+        const newAvailable = Number(existingBook.available || 0) + copyCount;
+
+        db.prepare(`
+            UPDATE books
+            SET copies = ?,
+                available = ?
+            WHERE id = ?
+        `).run(newCopies, newAvailable, existingBook.id);
+
+        return res.json({
+            success: true,
+            message: "Bu kitob allaqachon mavjud edi. Nusxalar soni yangilandi.",
+            id: existingBook.id,
+            merged: true
+        });
+    }
+
     const result = db.prepare(`
         INSERT INTO books
         (
@@ -601,6 +690,15 @@ app.post("/api/users", (req, res) => {
 // ===============================
 
 function getTokenFromRequest(req) {
+    // GitHub Codespaces tunnel bilan to‘qnashmasligi uchun
+    // KITOBXON tokeni maxsus header orqali olinadi.
+    const customToken = req.headers["x-kitobxon-token"];
+
+    if (customToken && String(customToken).trim()) {
+        return String(customToken).trim();
+    }
+
+    // Eski Authorization usulini ham moslik uchun qoldiramiz.
     const header = req.headers.authorization || "";
 
     if (!header.startsWith("Bearer ")) {
@@ -1038,6 +1136,22 @@ app.get("/api/admin/users", requireAuth, (req, res) => {
 // SERVER
 // ===============================
 
+
+// Global JSON error handler
+app.use((err, req, res, next) => {
+    console.error("KITOBXON SERVER XATOSI:", err);
+
+    if (res.headersSent) {
+        return next(err);
+    }
+
+    res.status(err.status || 500).json({
+        success: false,
+        message: err.message || "Serverda noma'lum xatolik yuz berdi"
+    });
+});
+
+
 app.listen(PORT, "0.0.0.0", () => {
     console.log(`Kitobxon server ${PORT}-portda ishga tushdi`);
 });
@@ -1255,12 +1369,30 @@ function requireLibraryPermission(req, res, next) {
         });
     }
 
+    // Tuman/viloyat/respublika administratorlari
+    // barcha kutubxonalarni boshqarishi mumkin.
+    if (
+        user.role === "district_admin" ||
+        user.role === "region_admin" ||
+        user.role === "republic_admin"
+    ) {
+        req.targetLibraryId =
+            req.body?.library_id ||
+            req.params?.library_id ||
+            null;
+
+        next();
+        return;
+    }
+
     const targetLibraryId =
         req.body?.library_id ||
         req.params?.library_id ||
-        req.params?.id && db.prepare(
-            "SELECT library_id FROM books WHERE id = ?"
-        ).get(req.params.id)?.library_id;
+        (req.params?.id
+            ? db.prepare(
+                "SELECT library_id FROM books WHERE id = ?"
+              ).get(req.params.id)?.library_id
+            : null);
 
     if (!targetLibraryId) {
         return res.status(400).json({
