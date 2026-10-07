@@ -2155,7 +2155,7 @@ async function approveOperator(userId){
                 method:"POST",
                 headers:{
                     "Content-Type":"application/json",
-                    "Authorization":"Bearer " + token
+                    "X-Kitobxon-Token": token
                 },
                 body:JSON.stringify({
                     library_id:Number(libraryId)
