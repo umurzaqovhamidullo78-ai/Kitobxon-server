@@ -3225,10 +3225,6 @@ async function addBook(){
 
     if(coverFile){
 
-        if(coverFile.size > 2 * 1024 * 1024){
-            alert("Muqova rasmi 2 MB dan kichik bo‘lsin.");
-            return;
-        }
 
         cover = await readFileAsDataURL(coverFile);
     }
@@ -3248,10 +3244,6 @@ async function addBook(){
             return;
         }
 
-        if(bookFile.size > 20 * 1024 * 1024){
-            alert("Elektron kitob 20 MB dan kichik bo‘lsin.");
-            return;
-        }
 
         ebook_file = await readFileAsDataURL(bookFile);
         ebook_type = isPDF ? "pdf" : "epub";
