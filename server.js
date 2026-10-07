@@ -119,6 +119,19 @@ CREATE TABLE IF NOT EXISTS news (
 `);
 
 // ===============================
+// BOOKS DATABASE MIGRATION
+// ===============================
+const bookColumns = db.prepare("PRAGMA table_info(books)").all().map(c => c.name);
+
+if (!bookColumns.includes("ebook_file")) {
+    db.exec("ALTER TABLE books ADD COLUMN ebook_file TEXT");
+}
+
+if (!bookColumns.includes("ebook_type")) {
+    db.exec("ALTER TABLE books ADD COLUMN ebook_type TEXT");
+}
+
+// ===============================
 // AUTH DATABASE MIGRATION
 // ===============================
 
