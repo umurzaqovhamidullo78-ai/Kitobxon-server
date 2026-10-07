@@ -2104,6 +2104,15 @@ if(id === "home"){
     }
 
     if(id === "admin"){
+        const token = localStorage.getItem("kitobxon_token");
+        const user = JSON.parse(localStorage.getItem("kitobxon_user") || "null");
+
+        if(!token || !user || !["district_admin","region_admin","republic_admin","operator"].includes(user.role)){
+            alert("Admin paneliga kirish uchun avval administrator sifatida tizimga kiring.");
+            showPage("login");
+            return;
+        }
+
         loadAdminNews();
         document.getElementById("adminBooks").textContent = books.length;
         renderAdminBooks();
