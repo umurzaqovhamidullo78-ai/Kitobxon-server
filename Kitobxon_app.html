@@ -2104,15 +2104,6 @@ if(id === "home"){
     }
 
     if(id === "admin"){
-        const token = localStorage.getItem("kitobxon_token");
-        const user = JSON.parse(localStorage.getItem("kitobxon_user") || "null");
-
-        if(!token || !user || !["district_admin","region_admin","republic_admin","operator"].includes(user.role)){
-            alert("Admin paneliga kirish uchun avval administrator sifatida tizimga kiring.");
-            showPage("profile");
-            return;
-        }
-
         loadAdminNews();
         document.getElementById("adminBooks").textContent = books.length;
         renderAdminBooks();
@@ -2155,7 +2146,7 @@ async function approveOperator(userId){
                 method:"POST",
                 headers:{
                     "Content-Type":"application/json",
-                    "X-Kitobxon-Token": token
+                    "Authorization":"Bearer " + token
                 },
                 body:JSON.stringify({
                     library_id:Number(libraryId)
@@ -2556,14 +2547,14 @@ async function loadAdminLibraries(){
                         class="btn btn-light"
                         type="button"
                         onclick="editLibraryFromAdmin(${Number(library.id)})">
-                        ✏️ Tahrirlash
+                        ✏️
                     </button>
 
                     <button
                         class="btn btn-light"
                         type="button"
                         onclick="deleteLibraryFromAdmin(${Number(library.id)})">
-                        🗑️ O‘chirish
+                        🗑️
                     </button>
 
                 </div>
@@ -3019,7 +3010,7 @@ function renderAdminBooks(){
 
     container.innerHTML = "";
 
-    books.forEach(book => {
+    books.forEach((book, index) => {
 
         const card = document.createElement("div");
 
@@ -3028,39 +3019,30 @@ function renderAdminBooks(){
         card.style.marginTop = "10px";
 
         card.innerHTML = `
-            <strong>📖 ${escapeHTML(book.title || "")}</strong>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
+                <strong>${index + 1}. 📖 ${escapeHTML(book.title || "")}</strong>
 
-            <p>✍️ ${escapeHTML(book.author || "")}</p>
+                <div style="display:flex;gap:6px;align-items:center;">
+                    <button
+                        class="btn btn-light"
+                        type="button"
+                        onclick="editBook(${Number(book.id)})">
+                        ✏️
+                    </button>
 
-            ${book.genre ? `<p>📚 ${escapeHTML(book.genre)}</p>` : ""}
-
-            ${book.year ? `<p>📅 ${escapeHTML(book.year)}</p>` : ""}
-
-            <p>📦 Nusxa: ${Number(book.copies || 0)}</p>
-
-            <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
-
-                <button
-                    class="btn btn-light"
-                    type="button"
-                    onclick="editBook(${Number(book.id)})">
-                    ✏️ Tahrirlash
-                </button>
-
-                <button
-                    class="btn btn-light"
-                    type="button"
-                    onclick="deleteBook(${Number(book.id)})">
-                    🗑️ O‘chirish
-                </button>
-
+                    <button
+                        class="btn btn-light"
+                        type="button"
+                        onclick="deleteBook(${Number(book.id)})">
+                        🗑️
+                    </button>
+                </div>
             </div>
         `;
 
         container.appendChild(card);
     });
 }
-
 
 async function deleteBook(id){
 
@@ -3243,6 +3225,10 @@ async function addBook(){
 
     if(coverFile){
 
+        if(coverFile.size > 2 * 1024 * 1024){
+            alert("Muqova rasmi 2 MB dan kichik bo‘lsin.");
+            return;
+        }
 
         cover = await readFileAsDataURL(coverFile);
     }
@@ -3259,6 +3245,11 @@ async function addBook(){
 
         if(!isPDF && !isEPUB){
             alert("Faqat PDF yoki EPUB fayl tanlang.");
+            return;
+        }
+
+        if(bookFile.size > 20 * 1024 * 1024){
+            alert("Elektron kitob 20 MB dan kichik bo‘lsin.");
             return;
         }
 
@@ -3995,7 +3986,7 @@ async function loadAdminNews(){
                 <h4>${item.title || ""}</h4>
                 <p>${item.text || ""}</p>
                 <button class="btn btn-danger" type="button" onclick="deleteNews(${item.id})">
-                    🗑️ O‘chirish
+                    🗑️
                 </button>
             </div>
         `).join("");
